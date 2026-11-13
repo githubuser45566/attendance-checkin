@@ -6,7 +6,7 @@
   <style>
     @page {
       size: A4 portrait;
-      margin: 15mm;
+      margin: 10mm;
     }
     * {
       box-sizing: border-box;
@@ -23,12 +23,13 @@
       padding: 20px;
     }
     .poster {
-      width: 210mm;
-      min-height: 297mm;
+      width: 190mm;
+      max-width: 100%;
+      min-height: 277mm;
       background: #ffffff;
-      padding: 30px 40px;
+      padding: 28px 36px;
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -39,7 +40,7 @@
       text-align: center;
       width: 100%;
       border-bottom: 2px solid #e9edef;
-      padding-bottom: 18px;
+      padding-bottom: 14px;
     }
     .badge {
       display: inline-block;
@@ -49,72 +50,81 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
-      padding: 5px 14px;
+      padding: 4px 14px;
       border-radius: 20px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .header h1 {
-      font-size: 38px;
+      font-size: 36px;
       font-weight: 800;
       color: #075E54;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .header h2 {
       font-size: 20px;
       font-weight: 600;
       color: #111b21;
     }
+    .header .site-tag {
+      font-size: 13px;
+      color: #667781;
+      margin-top: 4px;
+    }
     .qr-container {
       background: #f8f9fa;
-      padding: 24px;
+      padding: 20px;
       border-radius: 16px;
       border: 2px dashed #075E54;
       text-align: center;
-      margin: 20px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin: 16px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
     .qr-container img {
-      width: 240px;
-      height: 240px;
+      width: 220px;
+      height: 220px;
       display: block;
       margin: 0 auto;
     }
     .qr-caption {
-      margin-top: 14px;
+      margin-top: 12px;
       font-size: 15px;
       font-weight: 700;
       color: #075E54;
       letter-spacing: 0.5px;
     }
+    .qr-subcaption {
+      font-size: 13px;
+      color: #667781;
+      margin-top: 3px;
+    }
     .steps-container {
       width: 100%;
       background: #ffffff;
-      border-radius: 10px;
-      padding: 10px 0;
+      padding: 6px 0;
     }
     .steps-title {
       font-size: 16px;
       font-weight: 700;
       color: #111b21;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .step-item {
       display: flex;
       align-items: flex-start;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       gap: 14px;
     }
     .step-num {
       background: #128C7E;
       color: white;
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 14px;
       flex-shrink: 0;
     }
     .step-text h4 {
@@ -131,12 +141,12 @@
       width: 100%;
       background: #fff3e0;
       border-left: 5px solid #ff9800;
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-radius: 8px;
       font-size: 12px;
       color: #e65100;
-      line-height: 1.4;
-      margin-top: 15px;
+      line-height: 1.45;
+      margin: 10px 0;
     }
     .footer {
       width: 100%;
@@ -144,19 +154,28 @@
       font-size: 12px;
       color: #8696a0;
       border-top: 1px solid #e9edef;
-      padding-top: 12px;
+      padding-top: 10px;
+    }
+    .footer-url {
+      color: #128C7E;
+      font-weight: 600;
+      margin-top: 3px;
+      font-size: 11px;
     }
     @media print {
       body {
-        background: white;
-        padding: 0;
+        background: transparent !important;
+        padding: 0 !important;
       }
       .poster {
-        border: none;
-        box-shadow: none;
-        width: 100%;
-        min-height: 100%;
-        padding: 20px;
+        border: none !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        min-height: auto !important;
+        height: 100% !important;
+        padding: 0 !important;
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
       }
     }
   </style>
@@ -167,13 +186,13 @@
       <div class="badge">Official Duty Attendance</div>
       <h1>Stitch Waste</h1>
       <h2>दैनिक उपस्थिति एवं लोकेशन चेक-इन</h2>
-      <div style="font-size: 13px; color: #667781; margin-top: 4px;">Site / Location: <strong>Devasya</strong></div>
+      <div class="site-tag">Site / Duty Location: <strong>Devasya</strong></div>
     </div>
 
     <div class="qr-container">
-      <img src="qr_code.png" alt="Scan for Attendance">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcCAIAAAAynOArAAAMcElEQVR4nO3cO24s27VFwccHGuqgbLVNtjooL+Vfg9rCGVhcOyvCJqryVxxIZ349z/N/AFD4/98+AADeQ1QAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJD5rj7ob//4e/VR1/n3P//1X/9m8vpUx3Pj51Sq+/XWa3jj733b73Sb6tnwpgJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAmWz768TkdlNl22bXiW37RTduUk0+q5ObVNuejW33/YT/Yz/zpgJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAmdHtrxM2fH5W7WidfM62za4b79cJz/z7fPI99aYCQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKAJl1219vNbnPU+0OVRtik/tglcnvqlT3qzL5/Gzbv/pk3lQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBIGP7a5HJHa0T1U7UJ+9oTe5xffIOm+2vPbypAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBm3fbXWzd8Pnm/aHL/qvquyW2rbfd9ctNs27lX3npeJ7ypAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBmdPtrck/prbbtMm3byLrx+vicPZ9zwv+xn3lTASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYDM1/M8v30MH2Fym6jimGe+6637aZXq+mx7Vt/KmwoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZL5/+wD+yg7Szyavz6TqOm+7pzc+P9vOffJ4Kp98zN5UAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASDz9TzP2Jdt27Gptom27Tud2HYvKpP39MS276q8dYNu0uSzccL2FwDriAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgM7r9VZnc2tq2D7ZtZ+yTN6Amn7ET27akTrz1Gm7b+pvkTQWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMt+/fQB/tW1X58YNn8l9pxt3z27cjpv8rm07WpVtx7Ptf13FmwoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZNZtf1XsIP1s297UiW27XiduPObKjVtt236nN15DbyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkMm2v966X/TWY67u143XZ3LP7a2qZ2zbjtaJbVtbk9fwhDcVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMh8Pc+TfNBb95S2bZpt2y+aNLmVtG3fqfLWe3rik/e4Jq+zNxUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIxuf03uTd24KfTJ17CybXPpxLbr/NaNrLfu3W37vXtTASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYDM6PbXiclNoRu3gLbZtk301h22yrZz/+TPObHt/+oJbyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBnd/tq2q8Of23bfJ7e23no8286r4rz+/HNOeFMBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgEy2/XVicn/mrZtU23Z+nNefu/Hctx3zNp98Db2pAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkDmyu2vT95lqtx4zCcmn40Tb93j8hv82eQm3jbeVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEg81190LZNoW2bS5PfNbnLtO1+bfuuE9t2q05sO54Tk9d52/+ESd5UAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASDz9TzP2JdNblJVG1nbdnW2bZGd2HYvtn3XiRuv4aQbz2vbMVfH400FgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKj21+VauNo237RNjfuTU0e87Zzn7Ttnk5+11vvRcWbCgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkvqsPmtzDuXGXaXKf58Ztq0nb9p22XeeT46mOefJevPVZ3cabCgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkvp7nGfuyGzd83nrMn7x7dmLbJtWN33Xixm2rSdt+Xye8qQCQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJA5rv6oLfuTU1uJW3b+Xnr8Zx8zlu3tk5Ux3zj733yGTux7btOeFMBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgMzX8zxjX/bJG0fb9nm2nVflrVtkzuvPv2vSjfer4k0FgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADLf1Qdt2wua3Nqa3B3atnF0Ytt93/Y5b7Vt12vb/aqescldrxPeVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEg8/U8z28fw/9s2y7T5MbRtp2fEzfuX731Ok+e17Ydtspb//9UvKkAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQCbb/tq2z3Ni2zbR5BbQjd91Ytu5VyZ/X299NirbnrFtz7M3FQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIXLn9tW0v6MZ9sBPbtq1ObDvmyWfjk934u3jrffemAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgCZddtfkxtQ27Z3tl3DSTc+G5W3PmPbfoM3Pj+2vwD4aKICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyHz/9gH81eTOz7YNqE+2bSvpxt2qyZ2obftgkyaPZ9t9P+FNBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyX8/z/PYxfITJvaBP3mWa3NqatG3f6cbnZ/IaTl6fbTt13lQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBIPNdfdC2raRJJ5s5N+78bNtlOjmeG4+5cuN932ZyI2vyuyZ3z7ypAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkAm2/46Mbk/U9m2JVV9zraNo23Hw8+2PauVT/4fVZ27NxUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIxuf514687P5D7PW3e0tm0cffKGWPWMTX7Otvs1uXs2+b/OmwoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZNZtf/GzyV2vEzfuaG3bgKps29o6UT0/2859229w8pi9qQCQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJAxvbXC9k4mjF57pNbW9u20Safw+rcq2O+8XfqTQWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMuu2vyY3aiZNbi5tu4bb9rgmt9FOVPfrxmPetrVVOTmebcdc8aYCQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKAJnR7a/JDagbVdtNk5tC23a0Jr31Gm47r20mr/ON19CbCgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkvp7n+e1jAOAlvKkAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBk/gMXku+Xp3DptQAAAABJRU5ErkJggg==" alt="Scan for Attendance">
       <div class="qr-caption">📲 SCAN WITH ANY SMARTPHONE CAMERA</div>
-      <div style="font-size: 12px; color: #667781; margin-top: 2px;">कैमरा या गूगल लेंस से स्कैन करें</div>
+      <div class="qr-subcaption">कैमरा या गूगल लेंस से स्कैन करें</div>
     </div>
 
     <div class="steps-container">
@@ -191,25 +210,28 @@
         <div class="step-num">2</div>
         <div class="step-text">
           <h4>Allow GPS Location (लोकेशन की अनुमति दें)</h4>
-          <p>Browser will verify your presence at the duty site.</p>
+          <p>Browser will verify your presence at the official duty site.</p>
         </div>
       </div>
 
       <div class="step-item">
         <div class="step-num">3</div>
         <div class="step-text">
-          <h4>Tap "Punch In" & Send (पंच इन दबाकर भेजें)</h4>
-          <p>WhatsApp will open directly with your live location. Tap Send.</p>
+          <h4>Tap "Punch In / Out" & Send (पंच इन या पंच आउट भेजें)</h4>
+          <p>Tap PUNCH IN when arriving, or PUNCH OUT when leaving. Tap Send in WhatsApp.</p>
         </div>
       </div>
     </div>
 
     <div class="notice-box">
-      ⚠️ <strong>Strict Policy / सख्त नियम:</strong> Every employee must punch from their own mobile phone. Proxy attendance is automatically detected and rejected by the attendance server.
+      ⚠️ <strong>Strict Attendance Policy / सख्त उपस्थिति नियम:</strong><br>
+      Every employee must punch from their own mobile phone. Proxy attendance is strictly prohibited.<br>
+      प्रत्येक कर्मचारी अपने ही फोन से पंच करें। प्रॉक्सी हाजिरी सिस्टम द्वारा स्वतः खारिज कर दी जाएगी।
     </div>
 
     <div class="footer">
       Automated WhatsApp Attendance & Verification System • Stitch Waste
+      <div class="footer-url">https://githubuser45566.github.io/attendance-checkin/</div>
     </div>
   </div>
 </body>

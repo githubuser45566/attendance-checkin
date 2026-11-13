@@ -6,13 +6,12 @@ for Stitch Waste employee attendance check-in.
 
 import os
 import sys
+import base64
 import qrcode
 from PIL import Image, ImageDraw, ImageFont
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 
 OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -49,7 +48,6 @@ def generate_png_poster(target_url, company_name="Stitch Waste", site_name="Deva
     f_title = ImageFont.truetype(FONT_LATIN_BOLD, 46)
     f_sub = ImageFont.truetype(FONT_DEVA_BOLD, 26)
     f_site = ImageFont.truetype(FONT_LATIN_REG, 20)
-    f_site_b = ImageFont.truetype(FONT_LATIN_BOLD, 20)
 
     f_caption_1 = ImageFont.truetype(FONT_LATIN_BOLD, 20)
     f_caption_2 = ImageFont.truetype(FONT_DEVA_REG, 17)
@@ -96,7 +94,7 @@ def generate_png_poster(target_url, company_name="Stitch Waste", site_name="Deva
     draw.line([60, 275, width - 60, 275], fill="#E9EDEF", width=2)
 
     # 6. QR Code Card Container
-    card_x1, card_y1, card_x2, card_y2 = 320, 305, 920, 895
+    card_x1, card_y1, card_x2, card_y2 = 320, 310, 920, 900
     draw.rounded_rectangle([card_x1, card_y1, card_x2, card_y2], radius=20, fill="#FAFAFA", outline="#E0E0E0", width=2)
 
     qr_img = Image.open(qr_path).convert('RGB')
@@ -116,7 +114,7 @@ def generate_png_poster(target_url, company_name="Stitch Waste", site_name="Deva
 
     # 7. Steps Section
     steps_x = 90
-    steps_y = 935
+    steps_y = 945
 
     draw.text((steps_x, steps_y), "📋 3 Simple Steps / 3 आसान चरण:", fill="#111B21", font=f_sec_title)
 
@@ -133,8 +131,8 @@ def generate_png_poster(target_url, company_name="Stitch Waste", site_name="Deva
         ),
         (
             "3",
-            "3. Tap Punch In & Send (पंच इन दबाकर भेजें)",
-            "WhatsApp opens directly with your live location. Tap Send."
+            "3. Tap Punch In / Out & Send (पंच इन या पंच आउट भेजें)",
+            "Tap PUNCH IN when arriving, or PUNCH OUT when leaving. Tap Send in WhatsApp."
         )
     ]
 
@@ -152,11 +150,11 @@ def generate_png_poster(target_url, company_name="Stitch Waste", site_name="Deva
         draw.text((tx, sy + 2), title, fill="#111B21", font=f_step_title)
         draw.text((tx, sy + 28), desc, fill="#667781", font=f_step_desc)
 
-        sy += 75
+        sy += 85
 
     # 8. Strict Notice Box
-    ny1 = 1290
-    ny2 = 1435
+    ny1 = 1320
+    ny2 = 1480
     nx1, nx2 = 80, width - 80
     draw.rounded_rectangle([nx1, ny1, nx2, ny2], radius=12, fill="#FFF3E0")
     draw.rectangle([nx1, ny1, nx1 + 8, ny2], fill="#FF9800")
@@ -164,19 +162,19 @@ def generate_png_poster(target_url, company_name="Stitch Waste", site_name="Deva
     draw.text((nx1 + 24, ny1 + 16), "⚠️ Strict Attendance Policy / सख्त उपस्थिति नियम:", fill="#E65100", font=f_notice_title)
     notice_line1 = "Every employee must punch from their own mobile phone. Proxy attendance is strictly prohibited."
     notice_line2 = "प्रत्येक कर्मचारी अपने ही फोन से पंच करें। प्रॉक्सी हाजिरी सिस्टम द्वारा स्वतः खारिज कर दी जाएगी।"
-    draw.text((nx1 + 24, ny1 + 48), notice_line1, fill="#BF360C", font=f_notice_body)
-    draw.text((nx1 + 24, ny1 + 76), notice_line2, fill="#BF360C", font=f_notice_title)
+    draw.text((nx1 + 24, ny1 + 52), notice_line1, fill="#BF360C", font=f_notice_body)
+    draw.text((nx1 + 24, ny1 + 84), notice_line2, fill="#BF360C", font=f_notice_title)
 
     # 9. Footer
-    draw.line([60, 1510, width - 60, 1510], fill="#E9EDEF", width=2)
+    draw.line([60, 1530, width - 60, 1530], fill="#E9EDEF", width=2)
 
     footer_t1 = f"Automated WhatsApp Attendance & Verification System • {company_name}"
     f1_box = draw.textbbox((0, 0), footer_t1, font=f_footer)
-    draw.text(((width - (f1_box[2] - f1_box[0])) // 2, 1530), footer_t1, fill="#8696A0", font=f_footer)
+    draw.text(((width - (f1_box[2] - f1_box[0])) // 2, 1555), footer_t1, fill="#8696A0", font=f_footer)
 
     footer_t2 = f"Direct Check-In Web App: {target_url}"
     f2_box = draw.textbbox((0, 0), footer_t2, font=f_footer)
-    draw.text(((width - (f2_box[2] - f2_box[0])) // 2, 1560), footer_t2, fill="#128C7E", font=f_footer)
+    draw.text(((width - (f2_box[2] - f2_box[0])) // 2, 1585), footer_t2, fill="#128C7E", font=f_footer)
 
     out_png = os.path.join(OUTPUT_DIR, "attendance_poster.png")
     img.save(out_png, "PNG", quality=95)
@@ -195,12 +193,15 @@ def generate_pdf_poster(target_url, company_name="Stitch Waste", site_name="Deva
     c.drawImage(png_path, 0, 0, width=page_w, height=page_h)
     c.showPage()
     c.save()
-    print(f"[✓] Generated Vector Printable PDF Poster at: {out_pdf}")
+    print(f"[✓] Generated Printable PDF Poster at: {out_pdf}")
     return out_pdf
 
 def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Devasya"):
     qr_filename = "qr_code.png"
-    generate_qr(target_url, qr_filename)
+    qr_path = generate_qr(target_url, qr_filename)
+
+    with open(qr_path, "rb") as f:
+        qr_base64 = base64.b64encode(f.read()).decode("utf-8")
 
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
@@ -210,7 +211,7 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
   <style>
     @page {{
       size: A4 portrait;
-      margin: 15mm;
+      margin: 10mm;
     }}
     * {{
       box-sizing: border-box;
@@ -227,12 +228,13 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
       padding: 20px;
     }}
     .poster {{
-      width: 210mm;
-      min-height: 297mm;
+      width: 190mm;
+      max-width: 100%;
+      min-height: 277mm;
       background: #ffffff;
-      padding: 30px 40px;
+      padding: 28px 36px;
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -243,7 +245,7 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
       text-align: center;
       width: 100%;
       border-bottom: 2px solid #e9edef;
-      padding-bottom: 18px;
+      padding-bottom: 14px;
     }}
     .badge {{
       display: inline-block;
@@ -253,72 +255,81 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
-      padding: 5px 14px;
+      padding: 4px 14px;
       border-radius: 20px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }}
     .header h1 {{
-      font-size: 38px;
+      font-size: 36px;
       font-weight: 800;
       color: #075E54;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }}
     .header h2 {{
       font-size: 20px;
       font-weight: 600;
       color: #111b21;
     }}
+    .header .site-tag {{
+      font-size: 13px;
+      color: #667781;
+      margin-top: 4px;
+    }}
     .qr-container {{
       background: #f8f9fa;
-      padding: 24px;
+      padding: 20px;
       border-radius: 16px;
       border: 2px dashed #075E54;
       text-align: center;
-      margin: 20px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin: 16px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }}
     .qr-container img {{
-      width: 240px;
-      height: 240px;
+      width: 220px;
+      height: 220px;
       display: block;
       margin: 0 auto;
     }}
     .qr-caption {{
-      margin-top: 14px;
+      margin-top: 12px;
       font-size: 15px;
       font-weight: 700;
       color: #075E54;
       letter-spacing: 0.5px;
     }}
+    .qr-subcaption {{
+      font-size: 13px;
+      color: #667781;
+      margin-top: 3px;
+    }}
     .steps-container {{
       width: 100%;
       background: #ffffff;
-      border-radius: 10px;
-      padding: 10px 0;
+      padding: 6px 0;
     }}
     .steps-title {{
       font-size: 16px;
       font-weight: 700;
       color: #111b21;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }}
     .step-item {{
       display: flex;
       align-items: flex-start;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       gap: 14px;
     }}
     .step-num {{
       background: #128C7E;
       color: white;
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 14px;
       flex-shrink: 0;
     }}
     .step-text h4 {{
@@ -335,12 +346,12 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
       width: 100%;
       background: #fff3e0;
       border-left: 5px solid #ff9800;
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-radius: 8px;
       font-size: 12px;
       color: #e65100;
-      line-height: 1.4;
-      margin-top: 15px;
+      line-height: 1.45;
+      margin: 10px 0;
     }}
     .footer {{
       width: 100%;
@@ -348,19 +359,28 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
       font-size: 12px;
       color: #8696a0;
       border-top: 1px solid #e9edef;
-      padding-top: 12px;
+      padding-top: 10px;
+    }}
+    .footer-url {{
+      color: #128C7E;
+      font-weight: 600;
+      margin-top: 3px;
+      font-size: 11px;
     }}
     @media print {{
       body {{
-        background: white;
-        padding: 0;
+        background: transparent !important;
+        padding: 0 !important;
       }}
       .poster {{
-        border: none;
-        box-shadow: none;
-        width: 100%;
-        min-height: 100%;
-        padding: 20px;
+        border: none !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        min-height: auto !important;
+        height: 100% !important;
+        padding: 0 !important;
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
       }}
     }}
   </style>
@@ -371,13 +391,13 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
       <div class="badge">Official Duty Attendance</div>
       <h1>{company_name}</h1>
       <h2>दैनिक उपस्थिति एवं लोकेशन चेक-इन</h2>
-      <div style="font-size: 13px; color: #667781; margin-top: 4px;">Site / Location: <strong>{site_name}</strong></div>
+      <div class="site-tag">Site / Duty Location: <strong>{site_name}</strong></div>
     </div>
 
     <div class="qr-container">
-      <img src="{qr_filename}" alt="Scan for Attendance">
+      <img src="data:image/png;base64,{qr_base64}" alt="Scan for Attendance">
       <div class="qr-caption">📲 SCAN WITH ANY SMARTPHONE CAMERA</div>
-      <div style="font-size: 12px; color: #667781; margin-top: 2px;">कैमरा या गूगल लेंस से स्कैन करें</div>
+      <div class="qr-subcaption">कैमरा या गूगल लेंस से स्कैन करें</div>
     </div>
 
     <div class="steps-container">
@@ -395,25 +415,28 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
         <div class="step-num">2</div>
         <div class="step-text">
           <h4>Allow GPS Location (लोकेशन की अनुमति दें)</h4>
-          <p>Browser will verify your presence at the duty site.</p>
+          <p>Browser will verify your presence at the official duty site.</p>
         </div>
       </div>
 
       <div class="step-item">
         <div class="step-num">3</div>
         <div class="step-text">
-          <h4>Tap "Punch In" & Send (पंच इन दबाकर भेजें)</h4>
-          <p>WhatsApp will open directly with your live location. Tap Send.</p>
+          <h4>Tap "Punch In / Out" & Send (पंच इन या पंच आउट भेजें)</h4>
+          <p>Tap PUNCH IN when arriving, or PUNCH OUT when leaving. Tap Send in WhatsApp.</p>
         </div>
       </div>
     </div>
 
     <div class="notice-box">
-      ⚠️ <strong>Strict Policy / सख्त नियम:</strong> Every employee must punch from their own mobile phone. Proxy attendance is automatically detected and rejected by the attendance server.
+      ⚠️ <strong>Strict Attendance Policy / सख्त उपस्थिति नियम:</strong><br>
+      Every employee must punch from their own mobile phone. Proxy attendance is strictly prohibited.<br>
+      प्रत्येक कर्मचारी अपने ही फोन से पंच करें। प्रॉक्सी हाजिरी सिस्टम द्वारा स्वतः खारिज कर दी जाएगी।
     </div>
 
     <div class="footer">
       Automated WhatsApp Attendance & Verification System • {company_name}
+      <div class="footer-url">{target_url}</div>
     </div>
   </div>
 </body>
@@ -422,7 +445,7 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
     out_html = os.path.join(OUTPUT_DIR, "attendance_poster.html")
     with open(out_html, "w", encoding="utf-8") as f:
         f.write(html_content)
-    print(f"[✓] Generated Printable Poster at: {out_html}")
+    print(f"[✓] Generated Self-Contained Printable Poster at: {out_html}")
     return out_html
 
 def generate_all(target_url, company_name="Stitch Waste", site_name="Devasya"):
