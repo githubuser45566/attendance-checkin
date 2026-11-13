@@ -126,8 +126,8 @@ def generate_png_poster(target_url, company_name="Stitch Waste", site_name="Deva
         ),
         (
             "3",
-            "3. Tap Punch In / Out & Send (पंच इन या पंच आउट भेजें)",
-            "Tap PUNCH IN when arriving, or PUNCH OUT when leaving. Tap Send in WhatsApp."
+            "3. Send to Attendance Group (व्हाट्सएप ग्रुप में भेजें)",
+            "Tap PUNCH IN or OUT, select your Attendance Group, and tap Send."
         )
     ]
 
@@ -413,8 +413,8 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
       <div class="step-item">
         <div class="step-num">3</div>
         <div class="step-text">
-          <h4>3. Tap "Punch In / Out" & Send (पंच इन या पंच आउट भेजें)</h4>
-          <p>Tap PUNCH IN when arriving, or PUNCH OUT when leaving. Tap Send in WhatsApp.</p>
+          <h4>3. Send to Attendance Group (व्हाट्सएप ग्रुप में भेजें)</h4>
+          <p>Tap PUNCH IN or OUT, select your Attendance Group, and tap Send.</p>
         </div>
       </div>
     </div>
