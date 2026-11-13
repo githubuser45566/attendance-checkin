@@ -228,12 +228,6 @@
         <div class="date" id="live-date">Loading date...</div>
       </div>
 
-      <!-- Employee Name (Saved in localStorage) -->
-      <div class="form-group">
-        <label class="form-label" for="worker-name">Employee Name / नाम (Optional)</label>
-        <input type="text" id="worker-name" class="input-field" placeholder="Enter your name (optional)" autocomplete="name">
-      </div>
-
       <!-- Live Location Box -->
       <div class="location-box" id="loc-box">
         <div class="loc-icon" id="loc-icon">🛰️</div>
@@ -259,7 +253,7 @@
       <ol>
         <li>Allow location permission in your browser (ब्राउज़र में लोकेशन की अनुमति दें).</li>
         <li>Tap <strong>PUNCH IN</strong> when arriving or <strong>PUNCH OUT</strong> when leaving.</li>
-        <li>WhatsApp will open with your pre-filled location message. Simply select your <strong>Attendance Group</strong> and tap <strong>Send</strong>.</li>
+        <li>WhatsApp will open directly with your punch message. Simply tap <strong>Send (भेजें)</strong>.</li>
       </ol>
     </div>
 
@@ -284,13 +278,6 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
-
-    // Load saved worker name
-    const nameInput = document.getElementById('worker-name');
-    nameInput.value = localStorage.getItem('attendance_worker_name') || '';
-    nameInput.addEventListener('input', (e) => {
-      localStorage.setItem('attendance_worker_name', e.target.value.trim());
-    });
 
     // Acquire GPS location
     function acquireLocation() {
@@ -367,20 +354,14 @@
       }
 
       const mapLink = `https://maps.google.com/?q=${userCoords.lat},${userCoords.lng}`;
-      const name = (nameInput.value || '').trim();
-
       // Standard format strictly compatible with whatsapp-attendance bot parser
-      let message = `${action}`;
-      if (name) {
-        message += ` - ${name}`;
-      }
-      message += `\n${mapLink}`;
-
+      const message = `${action}\n${mapLink}`;
       const encodedMsg = encodeURIComponent(message);
 
-      // Deep link to WhatsApp
-      const waNativeUrl = `whatsapp://send?text=${encodedMsg}`;
-      const waWebUrl = `https://api.whatsapp.com/send?text=${encodedMsg}`;
+      // Deep link to WhatsApp (Directly opens Stitch Waste Attendance Bot)
+      const BOT_PHONE = '919334057028';
+      const waNativeUrl = `whatsapp://send?phone=${BOT_PHONE}&text=${encodedMsg}`;
+      const waWebUrl = `https://wa.me/${BOT_PHONE}?text=${encodedMsg}`;
 
       // Attempt native app protocol first, fallback to web api
       const start = Date.now();
