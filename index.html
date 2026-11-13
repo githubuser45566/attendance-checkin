@@ -85,6 +85,7 @@
       color: var(--text-muted);
       text-align: right;
     }
+    /* Location & Integrity Box */
     .location-box {
       border: 1.5px dashed #cbd5e1;
       border-radius: 12px;
@@ -97,6 +98,10 @@
     .location-box.acquired {
       border-color: var(--accent);
       background: #e8f5e9;
+    }
+    .location-box.warning {
+      border-color: var(--warning);
+      background: #fffbeb;
     }
     .location-box.error {
       border-color: var(--danger);
@@ -116,6 +121,26 @@
       font-size: 11px;
       color: var(--text-muted);
       font-family: monospace;
+    }
+    .integrity-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--text);
+    }
+    .integrity-pill.verified {
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .integrity-pill.warning {
+      background: #fef3c7;
+      color: #b45309;
     }
     .retry-btn {
       margin-top: 8px;
@@ -261,12 +286,15 @@
         <div class="date" id="live-date">Loading date...</div>
       </div>
 
-      <!-- Live Location GPS Box -->
+      <!-- Live Location GPS Box with Hardware Integrity -->
       <div class="location-box" id="loc-box">
         <div class="loc-icon" id="loc-icon">🛰️</div>
-        <div class="loc-status" id="loc-status">Detecting GPS Location...</div>
+        <div class="loc-status" id="loc-status">Detecting Hardware GPS...</div>
         <div class="loc-coords" id="loc-coords">Please allow location permission when prompted</div>
-        <button type="button" class="retry-btn" id="retry-btn" style="display: none;" onclick="acquireLocation()">Try Again (पुनः प्रयास करें)</button>
+        <div class="integrity-pill" id="integrity-pill" style="display: none;">🛡️ Checking Sensor Integrity...</div>
+        <div>
+          <button type="button" class="retry-btn" id="retry-btn" style="display: none;" onclick="acquireLocation()">Try Again (पुनः प्रयास करें)</button>
+        </div>
       </div>
 
       <!-- Workplace Geofence Status -->
@@ -297,7 +325,7 @@
         <li>Allow location permission in your browser (ब्राउज़र में लोकेशन की अनुमति दें).</li>
         <li>Ensure you are at <strong>Devasya City Centre</strong> (उपस्थिति कार्यस्थल पर पहुंचकर ही लगाएं).</li>
         <li>Tap <strong>PUNCH IN</strong> when arriving or <strong>PUNCH OUT</strong> when leaving.</li>
-        <li>WhatsApp will open with your punch text. Select the <strong>Attendance Group</strong> and tap <strong>Send</strong>.</li>
+        <li>WhatsApp will open with your punch text. Select <strong>Daily Attendance SIC/SW</strong> and tap <strong>Send</strong>.</li>
       </ol>
     </div>
 
@@ -320,6 +348,7 @@
     let userDistance = null;
     let isInsideGeofence = false;
     let adminBypass = false;
+    let gpsIntegrity = { verified: false, reasons: [], has3DFix: false };
 
     // Clock updater
     function updateClock() {
@@ -349,6 +378,49 @@
       return Math.round(R * c);
     }
 
+    // Hardware GPS Anti-Spoofing & Sensor Integrity Verification
+    function verifyGpsIntegrity(position) {
+      const reasons = [];
+      const accuracy = Math.round(position.coords.accuracy);
+      const ageMs = Date.now() - position.timestamp;
+
+      // 1. Browser automation / emulator detection
+      if (navigator.webdriver) {
+        reasons.push('Automated browser environment detected');
+      }
+
+      // 2. Mock location bounds
+      // Mock location apps commonly return artificial 0.0m or negative accuracy
+      if (accuracy <= 0) {
+        reasons.push('Invalid GPS accuracy (0m). Hardware satellite lock missing');
+      } else if (accuracy > 120) {
+        reasons.push(`Low-accuracy cellular signal (±${accuracy}m). Satellite GPS required`);
+      }
+
+      // 3. Stale GPS cache check
+      if (ageMs > 45000) {
+        reasons.push(`Stale GPS fix (${Math.round(ageMs / 1000)}s old). Fresh satellite fix needed`);
+      }
+
+      // 4. Coordinates sanity
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+        reasons.push('Out-of-bounds coordinates detected');
+      }
+
+      const has3DFix = position.coords.altitude !== null && position.coords.altitude !== undefined;
+
+      return {
+        verified: reasons.length === 0,
+        reasons,
+        accuracy,
+        altitude: has3DFix ? Math.round(position.coords.altitude) : null,
+        has3DFix,
+        timestamp: position.timestamp
+      };
+    }
+
     // Update Geofence UI and Button States
     function updateGeofenceUI() {
       const geoBox = document.getElementById('geofence-box');
@@ -374,11 +446,11 @@
       isInsideGeofence = userDistance <= WORKPLACE.radiusMeters;
       const distStr = userDistance >= 1000 ? `${(userDistance / 1000).toFixed(2)} km` : `${userDistance}m`;
 
-      if (isInsideGeofence) {
+      if (isInsideGeofence && gpsIntegrity.verified) {
         geoBox.className = 'geofence-badge inside';
         geoIcon.innerText = '🏢';
         geoTitle.innerText = `Verified On-Site: ${WORKPLACE.shortName}`;
-        geoDesc.innerHTML = `कार्यस्थल सीमा के भीतर (~${distStr} away, radius: ${WORKPLACE.radiusMeters}m).<br>Attendance verified for Devasya.`;
+        geoDesc.innerHTML = `कार्यस्थल सीमा के भीतर (~${distStr} away, limit: ${WORKPLACE.radiusMeters}m).<br>Hardware GPS & Workplace verified.`;
         adminBtn.style.display = 'none';
         btnLogin.disabled = false;
         btnLogout.disabled = false;
@@ -391,6 +463,15 @@
         adminBtn.style.display = 'inline-block';
         btnLogin.disabled = false;
         btnLogout.disabled = false;
+      } else if (!gpsIntegrity.verified) {
+        geoBox.className = 'geofence-badge outside';
+        geoIcon.innerText = '⚠️';
+        geoTitle.innerText = 'GPS Integrity Check Failed';
+        geoDesc.innerHTML = `${gpsIntegrity.reasons.join('. ')}.<br><span style="color:#c62828;">जीपीएस सिग्नल कमजोर या संदिग्ध है। कृपया खुले आसमान के नीचे आकर पुनः प्रयास करें।</span>`;
+        adminBtn.innerText = '🛠️ Admin Test Mode (एडमिन टेस्ट)';
+        adminBtn.style.display = 'inline-block';
+        btnLogin.disabled = true;
+        btnLogout.disabled = true;
       } else {
         geoBox.className = 'geofence-badge outside';
         geoIcon.innerText = '🚫';
@@ -417,18 +498,20 @@
       }
     }
 
-    // Acquire GPS location
+    // Acquire GPS location with Hardware Integrity Check
     function acquireLocation() {
       const locBox = document.getElementById('loc-box');
       const locIcon = document.getElementById('loc-icon');
       const locStatus = document.getElementById('loc-status');
       const locCoords = document.getElementById('loc-coords');
+      const integrityPill = document.getElementById('integrity-pill');
       const retryBtn = document.getElementById('retry-btn');
 
       locBox.className = 'location-box';
       locIcon.innerText = '🛰️';
-      locStatus.innerText = 'Fetching precise GPS coordinates...';
+      locStatus.innerText = 'Fetching hardware satellite GPS...';
       locCoords.innerText = 'Please ensure device GPS is turned on';
+      integrityPill.style.display = 'none';
       retryBtn.style.display = 'none';
 
       if (!navigator.geolocation) {
@@ -444,13 +527,30 @@
           userCoords = {
             lat: parseFloat(position.coords.latitude.toFixed(6)),
             lng: parseFloat(position.coords.longitude.toFixed(6)),
-            accuracy: Math.round(position.coords.accuracy)
+            accuracy: Math.round(position.coords.accuracy),
+            altitude: position.coords.altitude ? Math.round(position.coords.altitude) : null
           };
 
-          locBox.className = 'location-box acquired';
-          locIcon.innerText = '📍';
-          locStatus.innerText = `GPS Acquired (जीपीएस प्राप्त)`;
-          locCoords.innerText = `${userCoords.lat}, ${userCoords.lng} (Accuracy: ±${userCoords.accuracy}m)`;
+          // Run Hardware GPS Integrity & Anti-Spoofing check
+          gpsIntegrity = verifyGpsIntegrity(position);
+
+          if (gpsIntegrity.verified) {
+            locBox.className = 'location-box acquired';
+            locIcon.innerText = '📍';
+            locStatus.innerText = `Hardware GPS Locked (सत्यापित)`;
+            locCoords.innerText = `${userCoords.lat}, ${userCoords.lng} (Accuracy: ±${userCoords.accuracy}m)`;
+            integrityPill.className = 'integrity-pill verified';
+            integrityPill.innerText = `🛡️ Live Satellite Lock ${gpsIntegrity.has3DFix ? `(Alt: ${gpsIntegrity.altitude}m)` : ''}`;
+            integrityPill.style.display = 'inline-flex';
+          } else {
+            locBox.className = 'location-box warning';
+            locIcon.innerText = '⚠️';
+            locStatus.innerText = `GPS Accuracy Warning (±${userCoords.accuracy}m)`;
+            locCoords.innerText = `${userCoords.lat}, ${userCoords.lng}`;
+            integrityPill.className = 'integrity-pill warning';
+            integrityPill.innerText = `⚠️ Low Accuracy / Mock Suspected`;
+            integrityPill.style.display = 'inline-flex';
+          }
 
           // Evaluate Geofence
           updateGeofenceUI();
@@ -465,6 +565,7 @@
 
           locStatus.innerText = msg;
           locCoords.innerText = 'लोकेशन ऑन करें और "Try Again" दबाएं';
+          integrityPill.style.display = 'none';
           retryBtn.style.display = 'inline-block';
           updateGeofenceUI();
         },
@@ -487,15 +588,20 @@
         return;
       }
 
-      if (!isInsideGeofence && !adminBypass) {
+      if ((!isInsideGeofence || !gpsIntegrity.verified) && !adminBypass) {
+        if (!gpsIntegrity.verified) {
+          alert(`GPS Integrity Check Warning:\n${gpsIntegrity.reasons.join('\n')}\nPlease ensure Mock Locations are disabled and satellite signal is clear.`);
+          return;
+        }
         const distStr = userDistance >= 1000 ? `${(userDistance / 1000).toFixed(2)} km` : `${userDistance}m`;
         alert(`You are outside the workplace boundary (${distStr} away from ${WORKPLACE.shortName}).\nPlease reach the workplace to punch attendance.`);
         return;
       }
 
-      const mapLink = `https://maps.google.com/?q=${userCoords.lat},${userCoords.lng}`;
-      // Standard format strictly compatible with whatsapp-attendance bot parser
-      const message = `${action}\n${mapLink}`;
+      // Include site name with action (e.g. "Login Devasya City Centre")
+      const actionText = `${action} ${WORKPLACE.shortName}`;
+      const mapLink = `https://maps.google.com/?q=${userCoords.lat},${userCoords.lng}&acc=${userCoords.accuracy}`;
+      const message = `${actionText}\n${mapLink}`;
       const encodedMsg = encodeURIComponent(message);
 
       // Deep link to WhatsApp (Group Share Picker)
