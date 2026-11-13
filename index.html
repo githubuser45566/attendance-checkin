@@ -577,11 +577,36 @@
       );
     }
 
+    // Cryptographic SHA-256 Signature Generator for Time-Bound Anti-Replay Tokens
+    async function generatePunchSignature(action, lat, lng, acc, t) {
+      const secret = 'SW_CRYSTALLIX_DEVASYA_2026';
+      const actionClean = action.replace(/[^a-zA-Z]/g, '').toUpperCase();
+      const payload = `${actionClean}:${lat}:${lng}:${acc}:${t}:${secret}`;
+
+      if (window.crypto && crypto.subtle) {
+        const msgUint8 = new TextEncoder().encode(payload);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 10);
+      }
+
+      // Simple fallback hash
+      let h1 = 0xdeadbeef, h2 = 0x41c64e6d;
+      for (let i = 0; i < payload.length; i++) {
+        const ch = payload.charCodeAt(i);
+        h1 = Math.imul(h1 ^ ch, 2654435761);
+        h2 = Math.imul(h2 ^ ch, 1597334677);
+      }
+      h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+      h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+      return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16).padStart(10, '0').slice(0, 10);
+    }
+
     // Auto-acquire location on page load
     window.addEventListener('DOMContentLoaded', acquireLocation);
 
     // Format message and send via WhatsApp Group Picker
-    function sendPunch(action) {
+    async function sendPunch(action) {
       if (!userCoords) {
         alert('Please wait for GPS location to be verified before punching!');
         acquireLocation();
@@ -598,9 +623,14 @@
         return;
       }
 
+      // Generate live 90-second cryptographic punch token
+      const t = Math.floor(Date.now() / 1000);
+      const acc = userCoords.accuracy || 0;
+      const sig = await generatePunchSignature(action, userCoords.lat, userCoords.lng, acc, t);
+
       // Include site name with action (e.g. "Login Devasya City Centre")
       const actionText = `${action} ${WORKPLACE.shortName}`;
-      const mapLink = `https://maps.google.com/?q=${userCoords.lat},${userCoords.lng}&acc=${userCoords.accuracy}`;
+      const mapLink = `https://maps.google.com/?q=${userCoords.lat},${userCoords.lng}&acc=${acc}&t=${t}&sig=${sig}`;
       const message = `${actionText}\n${mapLink}`;
       const encodedMsg = encodeURIComponent(message);
 
