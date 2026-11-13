@@ -2,6 +2,7 @@
 """
 Generates high-resolution QR codes, PNG poster, PDF poster, and printable HTML poster
 for Stitch Waste employee attendance check-in.
+Uses Nirmala UI for perfect unified rendering of English, Hindi, and numbers without tofu boxes.
 """
 
 import os
@@ -11,14 +12,11 @@ import qrcode
 from PIL import Image, ImageDraw, ImageFont
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
-from reportlab.lib import colors
 
 OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-FONT_LATIN_BOLD = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
-FONT_LATIN_REG = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
-FONT_DEVA_BOLD = "/usr/share/fonts/truetype/noto/NotoSansDevanagari-Bold.ttf"
-FONT_DEVA_REG = "/usr/share/fonts/truetype/noto/NotoSansDevanagari-Regular.ttf"
+FONT_BOLD = "/home/rahul/.local/share/fonts/microsoft/NirmalaB.ttf"
+FONT_REG = "/home/rahul/.local/share/fonts/microsoft/Nirmala.ttf"
 
 def generate_qr(target_url, filename="qr_code.png"):
     qr = qrcode.QRCode(
@@ -44,57 +42,55 @@ def generate_png_poster(target_url, company_name="Stitch Waste", site_name="Deva
     img = Image.new("RGB", (width, height), "#FFFFFF")
     draw = ImageDraw.Draw(img)
 
-    f_badge = ImageFont.truetype(FONT_LATIN_BOLD, 16)
-    f_title = ImageFont.truetype(FONT_LATIN_BOLD, 46)
-    f_sub = ImageFont.truetype(FONT_DEVA_BOLD, 26)
-    f_site = ImageFont.truetype(FONT_LATIN_REG, 20)
+    f_badge = ImageFont.truetype(FONT_BOLD, 16)
+    f_title = ImageFont.truetype(FONT_BOLD, 46)
+    f_sub = ImageFont.truetype(FONT_BOLD, 26)
+    f_site = ImageFont.truetype(FONT_REG, 20)
 
-    f_caption_1 = ImageFont.truetype(FONT_LATIN_BOLD, 20)
-    f_caption_2 = ImageFont.truetype(FONT_DEVA_REG, 17)
+    f_caption_1 = ImageFont.truetype(FONT_BOLD, 22)
+    f_caption_2 = ImageFont.truetype(FONT_BOLD, 18)
 
-    f_sec_title = ImageFont.truetype(FONT_DEVA_BOLD, 22)
-    f_step_num = ImageFont.truetype(FONT_LATIN_BOLD, 22)
-    f_step_title = ImageFont.truetype(FONT_DEVA_BOLD, 20)
-    f_step_desc = ImageFont.truetype(FONT_LATIN_REG, 16)
+    f_sec_title = ImageFont.truetype(FONT_BOLD, 24)
+    f_step_num = ImageFont.truetype(FONT_BOLD, 22)
+    f_step_title = ImageFont.truetype(FONT_BOLD, 20)
+    f_step_desc = ImageFont.truetype(FONT_REG, 17)
 
-    f_notice_title = ImageFont.truetype(FONT_DEVA_BOLD, 17)
-    f_notice_body = ImageFont.truetype(FONT_LATIN_REG, 15)
-    f_footer = ImageFont.truetype(FONT_LATIN_REG, 15)
+    f_notice_title = ImageFont.truetype(FONT_BOLD, 19)
+    f_notice_body1 = ImageFont.truetype(FONT_REG, 16)
+    f_notice_body2 = ImageFont.truetype(FONT_BOLD, 16)
+    f_footer = ImageFont.truetype(FONT_REG, 15)
 
     # 1. Outer Frame Border
-    draw.rounded_rectangle([25, 25, width - 25, height - 25], radius=24, outline="#D1D7DB", width=2)
+    draw.rounded_rectangle([30, 30, width - 30, height - 30], radius=24, outline="#D1D7DB", width=3)
 
     # 2. Badge (Top Centered)
     badge_text = "OFFICIAL DUTY ATTENDANCE"
     b_box = draw.textbbox((0, 0), badge_text, font=f_badge)
     bw, bh = b_box[2] - b_box[0], b_box[3] - b_box[1]
     bx = (width - bw) // 2
-    by = 55
-    draw.rounded_rectangle([bx - 16, by - 6, bx + bw + 16, by + bh + 8], radius=14, fill="#E8F5E9")
+    by = 65
+    draw.rounded_rectangle([bx - 18, by - 6, bx + bw + 18, by + bh + 8], radius=14, fill="#E8F5E9")
     draw.text((bx, by), badge_text, fill="#075E54", font=f_badge)
 
     # 3. Company Title
     t_box = draw.textbbox((0, 0), company_name, font=f_title)
-    tw = t_box[2] - t_box[0]
-    draw.text(((width - tw) // 2, 105), company_name, fill="#075E54", font=f_title)
+    draw.text(((width - (t_box[2] - t_box[0])) // 2, 115), company_name, fill="#075E54", font=f_title)
 
     # 4. Hindi Subtitle
     sub_text = "दैनिक उपस्थिति एवं लोकेशन चेक-इन"
     s_box = draw.textbbox((0, 0), sub_text, font=f_sub)
-    sw = s_box[2] - s_box[0]
-    draw.text(((width - sw) // 2, 175), sub_text, fill="#111B21", font=f_sub)
+    draw.text(((width - (s_box[2] - s_box[0])) // 2, 180), sub_text, fill="#111B21", font=f_sub)
 
     # 5. Site Name
     site_str = f"Site / Duty Location: {site_name}"
     site_box = draw.textbbox((0, 0), site_str, font=f_site)
-    sitew = site_box[2] - site_box[0]
-    draw.text(((width - sitew) // 2, 225), site_str, fill="#667781", font=f_site)
+    draw.text(((width - (site_box[2] - site_box[0])) // 2, 228), site_str, fill="#667781", font=f_site)
 
     # Header Divider Line
-    draw.line([60, 275, width - 60, 275], fill="#E9EDEF", width=2)
+    draw.line([70, 275, width - 70, 275], fill="#E9EDEF", width=2)
 
     # 6. QR Code Card Container
-    card_x1, card_y1, card_x2, card_y2 = 320, 310, 920, 900
+    card_x1, card_y1, card_x2, card_y2 = 320, 305, 920, 895
     draw.rounded_rectangle([card_x1, card_y1, card_x2, card_y2], radius=20, fill="#FAFAFA", outline="#E0E0E0", width=2)
 
     qr_img = Image.open(qr_path).convert('RGB')
@@ -104,19 +100,18 @@ def generate_png_poster(target_url, company_name="Stitch Waste", site_name="Deva
     qry = card_y1 + 25
     img.paste(qr_img, (qrx, qry))
 
-    cap1 = "📲 SCAN WITH ANY SMARTPHONE CAMERA"
+    cap1 = "SCAN WITH ANY SMARTPHONE CAMERA"
     c1_box = draw.textbbox((0, 0), cap1, font=f_caption_1)
     draw.text(((width - (c1_box[2] - c1_box[0])) // 2, qry + qr_size + 18), cap1, fill="#075E54", font=f_caption_1)
 
     cap2 = "कैमरा या गूगल लेंस से स्कैन करें"
     c2_box = draw.textbbox((0, 0), cap2, font=f_caption_2)
-    draw.text(((width - (c2_box[2] - c2_box[0])) // 2, qry + qr_size + 48), cap2, fill="#667781", font=f_caption_2)
+    draw.text(((width - (c2_box[2] - c2_box[0])) // 2, qry + qr_size + 50), cap2, fill="#667781", font=f_caption_2)
 
     # 7. Steps Section
-    steps_x = 90
-    steps_y = 945
-
-    draw.text((steps_x, steps_y), "📋 3 Simple Steps / 3 आसान चरण:", fill="#111B21", font=f_sec_title)
+    steps_x = 100
+    steps_y = 940
+    draw.text((steps_x, steps_y), "3 Simple Steps / 3 आसान चरण:", fill="#111B21", font=f_sec_title)
 
     steps = [
         (
@@ -127,7 +122,7 @@ def generate_png_poster(target_url, company_name="Stitch Waste", site_name="Deva
         (
             "2",
             "2. Allow GPS Location (लोकेशन की अनुमति दें)",
-            "Browser will verify your presence at the official duty site."
+            "Browser will automatically verify your presence at the duty site."
         ),
         (
             "3",
@@ -138,41 +133,37 @@ def generate_png_poster(target_url, company_name="Stitch Waste", site_name="Deva
 
     sy = steps_y + 45
     for num, title, desc in steps:
-        # Green Circle with Number
         cx, cy, r = steps_x + 22, sy + 22, 22
         draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill="#128C7E")
         n_box = draw.textbbox((0, 0), num, font=f_step_num)
         nw, nh = n_box[2] - n_box[0], n_box[3] - n_box[1]
         draw.text((cx - nw // 2, cy - nh // 2 - 2), num, fill="#FFFFFF", font=f_step_num)
 
-        # Title & Description
         tx = steps_x + 60
         draw.text((tx, sy + 2), title, fill="#111B21", font=f_step_title)
-        draw.text((tx, sy + 28), desc, fill="#667781", font=f_step_desc)
-
+        draw.text((tx, sy + 30), desc, fill="#667781", font=f_step_desc)
         sy += 85
 
     # 8. Strict Notice Box
     ny1 = 1320
-    ny2 = 1480
+    ny2 = 1485
     nx1, nx2 = 80, width - 80
-    draw.rounded_rectangle([nx1, ny1, nx2, ny2], radius=12, fill="#FFF3E0")
+    draw.rounded_rectangle([nx1, ny1, nx2, ny2], radius=14, fill="#FFF3E0")
     draw.rectangle([nx1, ny1, nx1 + 8, ny2], fill="#FF9800")
 
-    draw.text((nx1 + 24, ny1 + 16), "⚠️ Strict Attendance Policy / सख्त उपस्थिति नियम:", fill="#E65100", font=f_notice_title)
-    notice_line1 = "Every employee must punch from their own mobile phone. Proxy attendance is strictly prohibited."
-    notice_line2 = "प्रत्येक कर्मचारी अपने ही फोन से पंच करें। प्रॉक्सी हाजिरी सिस्टम द्वारा स्वतः खारिज कर दी जाएगी।"
-    draw.text((nx1 + 24, ny1 + 52), notice_line1, fill="#BF360C", font=f_notice_body)
-    draw.text((nx1 + 24, ny1 + 84), notice_line2, fill="#BF360C", font=f_notice_title)
+    draw.text((nx1 + 24, ny1 + 16), "Strict Attendance Policy / सख्त उपस्थिति नियम:", fill="#E65100", font=f_notice_title)
+    notice_l1 = "Every employee must punch from their own mobile phone. Proxy attendance is strictly prohibited."
+    notice_l2 = "प्रत्येक कर्मचारी अपने ही फोन से पंच करें। प्रॉक्सी हाजिरी सिस्टम द्वारा स्वतः खारिज कर दी जाएगी।"
+    draw.text((nx1 + 24, ny1 + 52), notice_l1, fill="#BF360C", font=f_notice_body1)
+    draw.text((nx1 + 24, ny1 + 86), notice_l2, fill="#BF360C", font=f_notice_body2)
 
     # 9. Footer
-    draw.line([60, 1530, width - 60, 1530], fill="#E9EDEF", width=2)
-
+    draw.line([70, 1530, width - 70, 1530], fill="#E9EDEF", width=2)
     footer_t1 = f"Automated WhatsApp Attendance & Verification System • {company_name}"
     f1_box = draw.textbbox((0, 0), footer_t1, font=f_footer)
     draw.text(((width - (f1_box[2] - f1_box[0])) // 2, 1555), footer_t1, fill="#8696A0", font=f_footer)
 
-    footer_t2 = f"Direct Check-In Web App: {target_url}"
+    footer_t2 = f"Direct Link: {target_url}"
     f2_box = draw.textbbox((0, 0), footer_t2, font=f_footer)
     draw.text(((width - (f2_box[2] - f2_box[0])) // 2, 1585), footer_t2, fill="#128C7E", font=f_footer)
 
@@ -217,7 +208,7 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', -apple-system, Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Segoe UI', 'Nirmala UI', -apple-system, Roboto, 'Noto Sans Devanagari', sans-serif;
     }}
     body {{
       background: #f0f2f5;
@@ -396,17 +387,17 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
 
     <div class="qr-container">
       <img src="data:image/png;base64,{qr_base64}" alt="Scan for Attendance">
-      <div class="qr-caption">📲 SCAN WITH ANY SMARTPHONE CAMERA</div>
+      <div class="qr-caption">SCAN WITH ANY SMARTPHONE CAMERA</div>
       <div class="qr-subcaption">कैमरा या गूगल लेंस से स्कैन करें</div>
     </div>
 
     <div class="steps-container">
-      <div class="steps-title">📋 3 Simple Steps / 3 आसान चरण:</div>
+      <div class="steps-title">3 Simple Steps / 3 आसान चरण:</div>
       
       <div class="step-item">
         <div class="step-num">1</div>
         <div class="step-text">
-          <h4>Scan QR Code (क्यूआर कोड स्कैन करें)</h4>
+          <h4>1. Scan QR Code (क्यूआर कोड स्कैन करें)</h4>
           <p>Open phone camera or Google Lens and point at this code.</p>
         </div>
       </div>
@@ -414,7 +405,7 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
       <div class="step-item">
         <div class="step-num">2</div>
         <div class="step-text">
-          <h4>Allow GPS Location (लोकेशन की अनुमति दें)</h4>
+          <h4>2. Allow GPS Location (लोकेशन की अनुमति दें)</h4>
           <p>Browser will verify your presence at the official duty site.</p>
         </div>
       </div>
@@ -422,14 +413,14 @@ def generate_html_poster(target_url, company_name="Stitch Waste", site_name="Dev
       <div class="step-item">
         <div class="step-num">3</div>
         <div class="step-text">
-          <h4>Tap "Punch In / Out" & Send (पंच इन या पंच आउट भेजें)</h4>
+          <h4>3. Tap "Punch In / Out" & Send (पंच इन या पंच आउट भेजें)</h4>
           <p>Tap PUNCH IN when arriving, or PUNCH OUT when leaving. Tap Send in WhatsApp.</p>
         </div>
       </div>
     </div>
 
     <div class="notice-box">
-      ⚠️ <strong>Strict Attendance Policy / सख्त उपस्थिति नियम:</strong><br>
+      <strong>Strict Attendance Policy / सख्त उपस्थिति नियम:</strong><br>
       Every employee must punch from their own mobile phone. Proxy attendance is strictly prohibited.<br>
       प्रत्येक कर्मचारी अपने ही फोन से पंच करें। प्रॉक्सी हाजिरी सिस्टम द्वारा स्वतः खारिज कर दी जाएगी।
     </div>
