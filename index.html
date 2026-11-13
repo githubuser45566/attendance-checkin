@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Smart Attendance Check-In</title>
+  <style>
+    :root {
+      --primary: #128C7E;
+      --primary-dark: #075E54;
+      --accent: #25D366;
+      --danger: #e53935;
+      --danger-dark: #c62828;
+      --bg: #f0f2f5;
+      --card-bg: #ffffff;
+      --text: #111b21;
+      --text-muted: #667781;
+      --border: #e9edef;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    .container {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 20px 16px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(7, 94, 84, 0.2);
+    }
+    .header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .header p {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 18px 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border);
+    }
+    .time-badge {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f7f9fa;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+    }
+    .time-badge .clock {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      letter-spacing: 0.5px;
+    }
+    .time-badge .date {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+    .location-box {
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      margin-bottom: 16px;
+      transition: all 0.2s ease;
+      background: #fafafa;
+    }
+    .location-box.acquired {
+      border-color: var(--accent);
+      background: #e8f5e9;
+    }
+    .location-box.error {
+      border-color: var(--danger);
+      background: #ffebee;
+    }
+    .loc-icon {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+    .loc-status {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .loc-coords {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+    .retry-btn {
+      margin-top: 8px;
+      background: white;
+      border: 1px solid #cbd5e1;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-field:focus {
+      border-color: var(--primary);
+    }
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .action-btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+      transition: transform 0.1s, opacity 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .action-btn:active {
+      transform: scale(0.98);
+    }
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .btn-login {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+    }
+    .btn-logout {
+      background: linear-gradient(135deg, #ef5350, #c62828);
+    }
+    .instructions {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      padding: 4px;
+    }
+    .instructions ol {
+      padding-left: 18px;
+      margin-top: 6px;
+    }
+    .instructions li {
+      margin-bottom: 4px;
+    }
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>Daily Attendance Check-In</h1>
+      <p>दैनिक उपस्थिति एवं लोकेशन पंच प्रणाली</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card">
+      <!-- Live Clock -->
+      <div class="time-badge">
+        <div>
+          <div style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Current Time</div>
+          <div class="clock" id="live-clock">--:--:--</div>
+        </div>
+        <div class="date" id="live-date">Loading date...</div>
+      </div>
+
+      <!-- Employee Name (Saved in localStorage) -->
+      <div class="form-group">
+        <label class="form-label" for="worker-name">Employee Name / नाम (Optional)</label>
+        <input type="text" id="worker-name" class="input-field" placeholder="Enter your name (optional)" autocomplete="name">
+      </div>
+
+      <!-- Live Location Box -->
+      <div class="location-box" id="loc-box">
+        <div class="loc-icon" id="loc-icon">🛰️</div>
+        <div class="loc-status" id="loc-status">Detecting GPS Location...</div>
+        <div class="loc-coords" id="loc-coords">Please allow location permission when prompted</div>
+        <button type="button" class="retry-btn" id="retry-btn" style="display: none;" onclick="acquireLocation()">Try Again (पुनः प्रयास करें)</button>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="btn-group">
+        <button class="action-btn btn-login" id="btn-login" onclick="sendPunch('Login')" disabled>
+          <span>🟢</span> PUNCH IN / लॉगिन
+        </button>
+        <button class="action-btn btn-logout" id="btn-logout" onclick="sendPunch('Logout')" disabled>
+          <span>🔴</span> PUNCH OUT / लॉगआउट
+        </button>
+      </div>
+    </div>
+
+    <!-- Instruction Guide -->
+    <div class="card instructions">
+      <strong>📌 How it works (कैसे काम करता है):</strong>
+      <ol>
+        <li>Allow location permission in your browser (ब्राउज़र में लोकेशन की अनुमति दें).</li>
+        <li>Tap <strong>PUNCH IN</strong> when arriving or <strong>PUNCH OUT</strong> when leaving.</li>
+        <li>WhatsApp will open with your pre-filled location message. Simply select your <strong>Attendance Group</strong> and tap <strong>Send</strong>.</li>
+      </ol>
+    </div>
+
+    <div class="footer">
+      Powered by SIC_SW Crystallix Automated Attendance System
+    </div>
+  </div>
+
+  <script>
+    let userCoords = null;
+
+    // Clock updater
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-GB', { hour12: false });
+      document.getElementById('live-date').innerText = now.toLocaleDateString('en-GB', {
+        weekday: 'short',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Load saved worker name
+    const nameInput = document.getElementById('worker-name');
+    nameInput.value = localStorage.getItem('attendance_worker_name') || '';
+    nameInput.addEventListener('input', (e) => {
+      localStorage.setItem('attendance_worker_name', e.target.value.trim());
+    });
+
+    // Acquire GPS location
+    function acquireLocation() {
+      const locBox = document.getElementById('loc-box');
+      const locIcon = document.getElementById('loc-icon');
+      const locStatus = document.getElementById('loc-status');
+      const locCoords = document.getElementById('loc-coords');
+      const retryBtn = document.getElementById('retry-btn');
+      const btnLogin = document.getElementById('btn-login');
+      const btnLogout = document.getElementById('btn-logout');
+
+      locBox.className = 'location-box';
+      locIcon.innerText = '🛰️';
+      locStatus.innerText = 'Fetching precise GPS coordinates...';
+      locCoords.innerText = 'Please ensure device GPS is turned on';
+      retryBtn.style.display = 'none';
+
+      if (!navigator.geolocation) {
+        locBox.className = 'location-box error';
+        locIcon.innerText = '⚠️';
+        locStatus.innerText = 'Geolocation not supported by this browser';
+        locCoords.innerText = 'Please open in Google Chrome or Safari';
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          userCoords = {
+            lat: position.coords.latitude.toFixed(6),
+            lng: position.coords.longitude.toFixed(6),
+            accuracy: Math.round(position.coords.accuracy)
+          };
+
+          locBox.className = 'location-box acquired';
+          locIcon.innerText = '📍';
+          locStatus.innerText = `Location Verified (सत्यापित)`;
+          locCoords.innerText = `${userCoords.lat}, ${userCoords.lng} (Accuracy: ±${userCoords.accuracy}m)`;
+
+          // Enable buttons
+          btnLogin.disabled = false;
+          btnLogout.disabled = false;
+        },
+        (error) => {
+          locBox.className = 'location-box error';
+          locIcon.innerText = '❌';
+          let msg = 'Failed to get location';
+          if (error.code === 1) msg = 'Location access denied. Please allow location permissions in browser settings.';
+          if (error.code === 2) msg = 'GPS signal unavailable. Move to open area and retry.';
+          if (error.code === 3) msg = 'GPS request timed out. Please retry.';
+
+          locStatus.innerText = msg;
+          locCoords.innerText = 'लोकेशन ऑन करें और "Try Again" दबाएं';
+          retryBtn.style.display = 'inline-block';
+          btnLogin.disabled = true;
+          btnLogout.disabled = true;
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 12000,
+          maximumAge: 0
+        }
+      );
+    }
+
+    // Auto-acquire location on page load
+    window.addEventListener('DOMContentLoaded', acquireLocation);
+
+    // Format message and send via WhatsApp
+    function sendPunch(action) {
+      if (!userCoords) {
+        alert('Please wait for GPS location to be verified before punching!');
+        acquireLocation();
+        return;
+      }
+
+      const mapLink = `https://maps.google.com/?q=${userCoords.lat},${userCoords.lng}`;
+      const name = (nameInput.value || '').trim();
+
+      // Standard format strictly compatible with whatsapp-attendance bot parser
+      let message = `${action}`;
+      if (name) {
+        message += ` - ${name}`;
+      }
+      message += `\n${mapLink}`;
+
+      const encodedMsg = encodeURIComponent(message);
+
+      // Deep link to WhatsApp
+      const waNativeUrl = `whatsapp://send?text=${encodedMsg}`;
+      const waWebUrl = `https://api.whatsapp.com/send?text=${encodedMsg}`;
+
+      // Attempt native app protocol first, fallback to web api
+      const start = Date.now();
+      window.location.href = waNativeUrl;
+
+      setTimeout(() => {
+        // If app did not open within 1.5s, fallback to web URL
+        if (Date.now() - start < 2000) {
+          window.location.href = waWebUrl;
+        }
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
