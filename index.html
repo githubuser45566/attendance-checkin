@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Smart Attendance Check-In</title>
+  <title>Smart Attendance Check-In - Devasya</title>
   <style>
     :root {
       --primary: #128C7E;
@@ -11,6 +11,7 @@
       --accent: #25D366;
       --danger: #e53935;
       --danger-dark: #c62828;
+      --warning: #f59e0b;
       --bg: #f0f2f5;
       --card-bg: #ffffff;
       --text: #111b21;
@@ -87,9 +88,9 @@
     .location-box {
       border: 1.5px dashed #cbd5e1;
       border-radius: 12px;
-      padding: 14px;
+      padding: 12px;
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       transition: all 0.2s ease;
       background: #fafafa;
     }
@@ -102,8 +103,8 @@
       background: #ffebee;
     }
     .loc-icon {
-      font-size: 24px;
-      margin-bottom: 4px;
+      font-size: 22px;
+      margin-bottom: 2px;
     }
     .loc-status {
       font-size: 13px;
@@ -126,30 +127,62 @@
       font-weight: 600;
       cursor: pointer;
     }
-    .form-group {
+    /* Geofence Card */
+    .geofence-badge {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 12px;
       margin-bottom: 16px;
-    }
-    .form-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      display: block;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .input-field {
-      width: 100%;
-      padding: 12px;
       border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 14px;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s;
+      background: #fafafa;
+      text-align: left;
+      transition: all 0.3s ease;
     }
-    .input-field:focus {
-      border-color: var(--primary);
+    .geofence-badge.inside {
+      border-color: #25D366;
+      background: #e8f5e9;
+    }
+    .geofence-badge.outside {
+      border-color: #ef5350;
+      background: #ffebee;
+    }
+    .geofence-badge.test-mode {
+      border-color: #f59e0b;
+      background: #fffbeb;
+    }
+    .geofence-icon {
+      font-size: 26px;
+      flex-shrink: 0;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .geofence-text {
+      flex-grow: 1;
+    }
+    .geofence-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 3px;
+      color: var(--text);
+    }
+    .geofence-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .admin-toggle-btn {
+      display: none;
+      margin-top: 8px;
+      background: white;
+      border: 1px solid #f59e0b;
+      color: #b45309;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
     }
     .btn-group {
       display: flex;
@@ -177,7 +210,7 @@
       transform: scale(0.98);
     }
     .action-btn:disabled {
-      opacity: 0.5;
+      opacity: 0.45;
       cursor: not-allowed;
       box-shadow: none;
     }
@@ -214,7 +247,7 @@
     <!-- Header -->
     <div class="header">
       <h1>Daily Attendance Check-In</h1>
-      <p>दैनिक उपस्थिति एवं लोकेशन पंच प्रणाली</p>
+      <p>Devasya City Centre, Shahdara | दैनिक उपस्थिति पंच</p>
     </div>
 
     <!-- Main Card -->
@@ -228,12 +261,22 @@
         <div class="date" id="live-date">Loading date...</div>
       </div>
 
-      <!-- Live Location Box -->
+      <!-- Live Location GPS Box -->
       <div class="location-box" id="loc-box">
         <div class="loc-icon" id="loc-icon">🛰️</div>
         <div class="loc-status" id="loc-status">Detecting GPS Location...</div>
         <div class="loc-coords" id="loc-coords">Please allow location permission when prompted</div>
         <button type="button" class="retry-btn" id="retry-btn" style="display: none;" onclick="acquireLocation()">Try Again (पुनः प्रयास करें)</button>
+      </div>
+
+      <!-- Workplace Geofence Status -->
+      <div class="geofence-badge" id="geofence-box">
+        <div class="geofence-icon" id="geofence-icon">🏢</div>
+        <div class="geofence-text">
+          <div class="geofence-title" id="geofence-title">Devasya City Centre</div>
+          <div class="geofence-desc" id="geofence-desc">Awaiting GPS verification... / जीपीएस लोकेशन जांची जा रही है...</div>
+          <button type="button" class="admin-toggle-btn" id="admin-bypass-btn" onclick="toggleAdminBypass()">🛠️ Admin Test Mode</button>
+        </div>
       </div>
 
       <!-- Action Buttons -->
@@ -249,11 +292,12 @@
 
     <!-- Instruction Guide -->
     <div class="card instructions">
-      <strong>📌 How it works (कैसे काम करता है):</strong>
+      <strong>📌 How it works (उपस्थिति कैसे दर्ज करें):</strong>
       <ol>
         <li>Allow location permission in your browser (ब्राउज़र में लोकेशन की अनुमति दें).</li>
+        <li>Ensure you are at <strong>Devasya City Centre</strong> (उपस्थिति कार्यस्थल पर पहुंचकर ही लगाएं).</li>
         <li>Tap <strong>PUNCH IN</strong> when arriving or <strong>PUNCH OUT</strong> when leaving.</li>
-        <li>WhatsApp will open with your pre-filled punch. Select the <strong>Attendance Group</strong> and tap <strong>Send</strong>.</li>
+        <li>WhatsApp will open with your punch text. Select the <strong>Attendance Group</strong> and tap <strong>Send</strong>.</li>
       </ol>
     </div>
 
@@ -263,7 +307,19 @@
   </div>
 
   <script>
+    // Workplace Configuration (Devasya City Centre)
+    const WORKPLACE = {
+      name: 'Devasya City Centre, Shahdara',
+      shortName: 'Devasya City Centre',
+      lat: 28.6552641,
+      lng: 77.3000944,
+      radiusMeters: 150
+    };
+
     let userCoords = null;
+    let userDistance = null;
+    let isInsideGeofence = false;
+    let adminBypass = false;
 
     // Clock updater
     function updateClock() {
@@ -279,6 +335,88 @@
     setInterval(updateClock, 1000);
     updateClock();
 
+    // Haversine formula to calculate distance in meters
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371e3; // Earth radius in meters
+      const toRad = deg => (deg * Math.PI) / 180;
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return Math.round(R * c);
+    }
+
+    // Update Geofence UI and Button States
+    function updateGeofenceUI() {
+      const geoBox = document.getElementById('geofence-box');
+      const geoIcon = document.getElementById('geofence-icon');
+      const geoTitle = document.getElementById('geofence-title');
+      const geoDesc = document.getElementById('geofence-desc');
+      const adminBtn = document.getElementById('admin-bypass-btn');
+      const btnLogin = document.getElementById('btn-login');
+      const btnLogout = document.getElementById('btn-logout');
+
+      if (!userCoords) {
+        geoBox.className = 'geofence-badge';
+        geoIcon.innerText = '🏢';
+        geoTitle.innerText = WORKPLACE.shortName;
+        geoDesc.innerText = 'Waiting for GPS location... / जीपीएस लोकेशन का इंतज़ार है...';
+        adminBtn.style.display = 'none';
+        btnLogin.disabled = true;
+        btnLogout.disabled = true;
+        return;
+      }
+
+      userDistance = calculateDistance(userCoords.lat, userCoords.lng, WORKPLACE.lat, WORKPLACE.lng);
+      isInsideGeofence = userDistance <= WORKPLACE.radiusMeters;
+      const distStr = userDistance >= 1000 ? `${(userDistance / 1000).toFixed(2)} km` : `${userDistance}m`;
+
+      if (isInsideGeofence) {
+        geoBox.className = 'geofence-badge inside';
+        geoIcon.innerText = '🏢';
+        geoTitle.innerText = `Verified On-Site: ${WORKPLACE.shortName}`;
+        geoDesc.innerHTML = `कार्यस्थल सीमा के भीतर (~${distStr} away, radius: ${WORKPLACE.radiusMeters}m).<br>Attendance verified for Devasya.`;
+        adminBtn.style.display = 'none';
+        btnLogin.disabled = false;
+        btnLogout.disabled = false;
+      } else if (adminBypass) {
+        geoBox.className = 'geofence-badge test-mode';
+        geoIcon.innerText = '🧪';
+        geoTitle.innerText = 'Admin Test Mode Active (परीक्षण मोड)';
+        geoDesc.innerHTML = `Location: ${distStr} away from site.<br><strong>Off-site punch enabled for verification only.</strong>`;
+        adminBtn.innerText = 'Disable Test Mode (बंद करें)';
+        adminBtn.style.display = 'inline-block';
+        btnLogin.disabled = false;
+        btnLogout.disabled = false;
+      } else {
+        geoBox.className = 'geofence-badge outside';
+        geoIcon.innerText = '🚫';
+        geoTitle.innerText = `Outside Workplace Boundary`;
+        geoDesc.innerHTML = `You are <strong>${distStr}</strong> away from ${WORKPLACE.shortName}. Attendance is strictly allowed within ${WORKPLACE.radiusMeters}m of the site.<br><span style="color:#c62828;">आप कार्यस्थल से ${distStr} दूर हैं। पंच केवल 150m दायरे में मान्य है।</span>`;
+        adminBtn.innerText = '🛠️ Admin Test Mode (एडमिन टेस्ट)';
+        adminBtn.style.display = 'inline-block';
+        btnLogin.disabled = true;
+        btnLogout.disabled = true;
+      }
+    }
+
+    // Toggle Admin Bypass for remote testing
+    function toggleAdminBypass() {
+      if (adminBypass) {
+        adminBypass = false;
+        updateGeofenceUI();
+      } else {
+        const ok = confirm('Enable Admin Test Mode to allow punching outside workplace boundary for testing?\nकार्यस्थल सीमा से बाहर टेस्ट पंच करने के लिए एडमिन टेस्ट मोड ऑन करें?');
+        if (ok) {
+          adminBypass = true;
+          updateGeofenceUI();
+        }
+      }
+    }
+
     // Acquire GPS location
     function acquireLocation() {
       const locBox = document.getElementById('loc-box');
@@ -286,8 +424,6 @@
       const locStatus = document.getElementById('loc-status');
       const locCoords = document.getElementById('loc-coords');
       const retryBtn = document.getElementById('retry-btn');
-      const btnLogin = document.getElementById('btn-login');
-      const btnLogout = document.getElementById('btn-logout');
 
       locBox.className = 'location-box';
       locIcon.innerText = '🛰️';
@@ -306,19 +442,18 @@
       navigator.geolocation.getCurrentPosition(
         (position) => {
           userCoords = {
-            lat: position.coords.latitude.toFixed(6),
-            lng: position.coords.longitude.toFixed(6),
+            lat: parseFloat(position.coords.latitude.toFixed(6)),
+            lng: parseFloat(position.coords.longitude.toFixed(6)),
             accuracy: Math.round(position.coords.accuracy)
           };
 
           locBox.className = 'location-box acquired';
           locIcon.innerText = '📍';
-          locStatus.innerText = `Location Verified (सत्यापित)`;
+          locStatus.innerText = `GPS Acquired (जीपीएस प्राप्त)`;
           locCoords.innerText = `${userCoords.lat}, ${userCoords.lng} (Accuracy: ±${userCoords.accuracy}m)`;
 
-          // Enable buttons
-          btnLogin.disabled = false;
-          btnLogout.disabled = false;
+          // Evaluate Geofence
+          updateGeofenceUI();
         },
         (error) => {
           locBox.className = 'location-box error';
@@ -331,8 +466,7 @@
           locStatus.innerText = msg;
           locCoords.innerText = 'लोकेशन ऑन करें और "Try Again" दबाएं';
           retryBtn.style.display = 'inline-block';
-          btnLogin.disabled = true;
-          btnLogout.disabled = true;
+          updateGeofenceUI();
         },
         {
           enableHighAccuracy: true,
@@ -345,11 +479,17 @@
     // Auto-acquire location on page load
     window.addEventListener('DOMContentLoaded', acquireLocation);
 
-    // Format message and send via WhatsApp
+    // Format message and send via WhatsApp Group Picker
     function sendPunch(action) {
       if (!userCoords) {
         alert('Please wait for GPS location to be verified before punching!');
         acquireLocation();
+        return;
+      }
+
+      if (!isInsideGeofence && !adminBypass) {
+        const distStr = userDistance >= 1000 ? `${(userDistance / 1000).toFixed(2)} km` : `${userDistance}m`;
+        alert(`You are outside the workplace boundary (${distStr} away from ${WORKPLACE.shortName}).\nPlease reach the workplace to punch attendance.`);
         return;
       }
 
