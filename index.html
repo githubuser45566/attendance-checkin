@@ -271,8 +271,8 @@
   <div class="container">
     <!-- Header -->
     <div class="header">
-      <h1>Daily Attendance Check-In</h1>
-      <p>Devasya City Centre, Shahdara | दैनिक उपस्थिति पंच</p>
+      <h1 id="header-title">Daily Attendance Check-In</h1>
+      <p id="header-subtitle">Devasya City Centre, Shahdara | दैनिक उपस्थिति पंच</p>
     </div>
 
     <!-- Main Card -->
@@ -323,7 +323,7 @@
       <strong>📌 How it works (उपस्थिति कैसे दर्ज करें):</strong>
       <ol>
         <li>Allow location permission in your browser (ब्राउज़र में लोकेशन की अनुमति दें).</li>
-        <li>Ensure you are at <strong>Devasya City Centre</strong> (उपस्थिति कार्यस्थल पर पहुंचकर ही लगाएं).</li>
+        <li>Ensure you are at <strong id="instruction-site">Devasya City Centre</strong> (उपस्थिति कार्यस्थल पर पहुंचकर ही लगाएं).</li>
         <li>Tap <strong>PUNCH IN</strong> when arriving or <strong>PUNCH OUT</strong> when leaving.</li>
         <li>WhatsApp will open with your punch text. Select <strong>Daily Attendance SIC/SW</strong> and tap <strong>Send</strong>.</li>
       </ol>
@@ -335,14 +335,86 @@
   </div>
 
   <script>
-    // Workplace Configuration (Devasya City Centre)
-    const WORKPLACE = {
-      name: 'Devasya City Centre, Shahdara',
-      shortName: 'Devasya City Centre',
-      lat: 28.6552641,
-      lng: 77.3000944,
-      radiusMeters: 150
+    // Multi-Site Workplace Registry
+    const SITES = {
+      'devasya': {
+        id: 'devasya',
+        name: 'Devasya City Centre, Shahdara',
+        shortName: 'Devasya City Centre',
+        punchName: 'Devasya City Centre',
+        address: 'Devasya City Centre, Shahdara, Delhi',
+        lat: 28.6552641,
+        lng: 77.3000944,
+        radiusMeters: 150
+      },
+      'office': {
+        id: 'office',
+        name: 'Stitch Waste Office, Mandawali',
+        shortName: 'Stitch Waste Office',
+        punchName: 'Office Mandawali',
+        address: 'A-120, IP Ext, Chander Vihar, Mandawali, New Delhi 110092',
+        lat: 28.6341896,
+        lng: 77.2984507,
+        radiusMeters: 120
+      },
+      'npcl_kp2': {
+        id: 'npcl_kp2',
+        name: 'NPCL KP-2, Greater Noida',
+        shortName: 'NPCL KP-2',
+        punchName: 'NPCL KP2 Greater Noida',
+        address: 'NPCL Substation, Knowledge Park 2, Greater Noida',
+        lat: 28.487450,
+        lng: 77.533410,
+        radiusMeters: 250
+      },
+      'npcl_kp3': {
+        id: 'npcl_kp3',
+        name: 'NPCL KP-3, Greater Noida',
+        shortName: 'NPCL KP-3',
+        punchName: 'NPCL KP3 Greater Noida',
+        address: 'NPCL Substation / STP, Knowledge Park 3, Greater Noida',
+        lat: 28.477560,
+        lng: 77.485790,
+        radiusMeters: 250
+      },
+      'npcl_dadha': {
+        id: 'npcl_dadha',
+        name: 'NPCL Dadha / Kasna',
+        shortName: 'NPCL Dadha',
+        punchName: 'NPCL Dadha Greater Noida',
+        address: 'NPCL Substation, Dadha / Kasna, Greater Noida',
+        lat: 28.452730,
+        lng: 77.560150,
+        radiusMeters: 250
+      },
+      'npcl_surajpur': {
+        id: 'npcl_surajpur',
+        name: 'NPCL Surajpur Substation',
+        shortName: 'NPCL Surajpur',
+        punchName: 'NPCL Surajpur Greater Noida',
+        address: 'NPCL Substation, Surajpur, Greater Noida',
+        lat: 28.504950,
+        lng: 77.461210,
+        radiusMeters: 250
+      }
     };
+
+    // Determine initial active site from URL query (?site=office, ?site=devasya, etc.)
+    const urlParams = new URLSearchParams(window.location.search);
+    const siteParam = (urlParams.get('site') || '').toLowerCase().trim();
+    const siteLockedByUrl = Boolean(siteParam && SITES[siteParam]);
+    let activeSite = siteLockedByUrl ? SITES[siteParam] : SITES['devasya'];
+
+    function applySiteUI(site) {
+      document.title = `Smart Attendance Check-In - ${site.shortName}`;
+      const headerSub = document.getElementById('header-subtitle');
+      if (headerSub) headerSub.innerText = `${site.name} | दैनिक उपस्थिति पंच`;
+      const instrSite = document.getElementById('instruction-site');
+      if (instrSite) instrSite.innerText = site.shortName;
+    }
+
+    // Apply UI labels immediately
+    applySiteUI(activeSite);
 
     let userCoords = null;
     let userDistance = null;
@@ -434,7 +506,7 @@
       if (!userCoords) {
         geoBox.className = 'geofence-badge';
         geoIcon.innerText = '🏢';
-        geoTitle.innerText = WORKPLACE.shortName;
+        geoTitle.innerText = activeSite.shortName;
         geoDesc.innerText = 'Waiting for GPS location... / जीपीएस लोकेशन का इंतज़ार है...';
         adminBtn.style.display = 'none';
         btnLogin.disabled = true;
@@ -442,15 +514,36 @@
         return;
       }
 
-      userDistance = calculateDistance(userCoords.lat, userCoords.lng, WORKPLACE.lat, WORKPLACE.lng);
-      isInsideGeofence = userDistance <= WORKPLACE.radiusMeters;
+      // If URL did not lock a specific site, auto-detect from all registered sites
+      if (!siteLockedByUrl) {
+        let matchedSite = null;
+        let closestSite = activeSite;
+        let minDistance = Infinity;
+
+        for (const s of Object.values(SITES)) {
+          const d = calculateDistance(userCoords.lat, userCoords.lng, s.lat, s.lng);
+          if (d <= s.radiusMeters) {
+            matchedSite = s;
+            break;
+          }
+          if (d < minDistance) {
+            minDistance = d;
+            closestSite = s;
+          }
+        }
+        activeSite = matchedSite || closestSite;
+        applySiteUI(activeSite);
+      }
+
+      userDistance = calculateDistance(userCoords.lat, userCoords.lng, activeSite.lat, activeSite.lng);
+      isInsideGeofence = userDistance <= activeSite.radiusMeters;
       const distStr = userDistance >= 1000 ? `${(userDistance / 1000).toFixed(2)} km` : `${userDistance}m`;
 
       if (isInsideGeofence && gpsIntegrity.verified) {
         geoBox.className = 'geofence-badge inside';
         geoIcon.innerText = '🏢';
-        geoTitle.innerText = `Verified On-Site: ${WORKPLACE.shortName}`;
-        geoDesc.innerHTML = `कार्यस्थल सीमा के भीतर (~${distStr} away, limit: ${WORKPLACE.radiusMeters}m).<br>Hardware GPS & Workplace verified.`;
+        geoTitle.innerText = `Verified On-Site: ${activeSite.shortName}`;
+        geoDesc.innerHTML = `कार्यस्थल सीमा के भीतर (~${distStr} away, limit: ${activeSite.radiusMeters}m).<br>Hardware GPS & Workplace verified.`;
         adminBtn.style.display = 'none';
         btnLogin.disabled = false;
         btnLogout.disabled = false;
@@ -458,7 +551,7 @@
         geoBox.className = 'geofence-badge test-mode';
         geoIcon.innerText = '🧪';
         geoTitle.innerText = 'Admin Test Mode Active (परीक्षण मोड)';
-        geoDesc.innerHTML = `Location: ${distStr} away from site.<br><strong>Off-site punch enabled for verification only.</strong>`;
+        geoDesc.innerHTML = `Location: ${distStr} away from ${activeSite.shortName}.<br><strong>Off-site punch enabled for verification only.</strong>`;
         adminBtn.innerText = 'Disable Test Mode (बंद करें)';
         adminBtn.style.display = 'inline-block';
         btnLogin.disabled = false;
@@ -476,7 +569,7 @@
         geoBox.className = 'geofence-badge outside';
         geoIcon.innerText = '🚫';
         geoTitle.innerText = `Outside Workplace Boundary`;
-        geoDesc.innerHTML = `You are <strong>${distStr}</strong> away from ${WORKPLACE.shortName}. Attendance is strictly allowed within ${WORKPLACE.radiusMeters}m of the site.<br><span style="color:#c62828;">आप कार्यस्थल से ${distStr} दूर हैं। पंच केवल 150m दायरे में मान्य है।</span>`;
+        geoDesc.innerHTML = `You are <strong>${distStr}</strong> away from ${activeSite.shortName}. Attendance is strictly allowed within ${activeSite.radiusMeters}m of the site.<br><span style="color:#c62828;">आप कार्यस्थल से ${distStr} दूर हैं। पंच केवल ${activeSite.radiusMeters}m दायरे में मान्य है।</span>`;
         adminBtn.innerText = '🛠️ Admin Test Mode (एडमिन टेस्ट)';
         adminBtn.style.display = 'inline-block';
         btnLogin.disabled = true;
@@ -619,7 +712,7 @@
           return;
         }
         const distStr = userDistance >= 1000 ? `${(userDistance / 1000).toFixed(2)} km` : `${userDistance}m`;
-        alert(`You are outside the workplace boundary (${distStr} away from ${WORKPLACE.shortName}).\nPlease reach the workplace to punch attendance.`);
+        alert(`You are outside the workplace boundary (${distStr} away from ${activeSite.shortName}).\nPlease reach the workplace to punch attendance.`);
         return;
       }
 
@@ -628,8 +721,8 @@
       const acc = userCoords.accuracy || 0;
       const sig = await generatePunchSignature(action, userCoords.lat, userCoords.lng, acc, t);
 
-      // Include site name with action (e.g. "Login Devasya City Centre")
-      const actionText = `${action} ${WORKPLACE.shortName}`;
+      // Include site name with action (e.g. "Login Office Mandawali" or "Login Devasya City Centre")
+      const actionText = `${action} ${activeSite.punchName}`;
       const mapLink = `https://maps.google.com/?q=${userCoords.lat},${userCoords.lng}&acc=${acc}&t=${t}&sig=${sig}`;
       const message = `${actionText}\n${mapLink}`;
       const encodedMsg = encodeURIComponent(message);
