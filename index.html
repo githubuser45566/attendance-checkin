@@ -271,7 +271,7 @@
   <div class="container">
     <!-- Header -->
     <div class="header">
-      <h1 id="header-title">Daily Attendance Check-In</h1>
+      <h1 id="header-title" onclick="onHeaderSecretTap()" style="cursor: pointer; -webkit-tap-highlight-color: transparent;">Daily Attendance Check-In</h1>
       <p id="header-subtitle">Devasya City Centre, Shahdara | दैनिक उपस्थिति पंच</p>
     </div>
 
@@ -299,7 +299,7 @@
 
       <!-- Workplace Geofence Status -->
       <div class="geofence-badge" id="geofence-box">
-        <div class="geofence-icon" id="geofence-icon">🏢</div>
+        <div class="geofence-icon" id="geofence-icon" onclick="onHeaderSecretTap()" style="cursor: pointer; -webkit-tap-highlight-color: transparent;">🏢</div>
         <div class="geofence-text">
           <div class="geofence-title" id="geofence-title">Devasya City Centre</div>
           <div class="geofence-desc" id="geofence-desc">Awaiting GPS verification... / जीपीएस लोकेशन जांची जा रही है...</div>
@@ -561,8 +561,7 @@
         geoIcon.innerText = '⚠️';
         geoTitle.innerText = 'GPS Integrity Check Failed';
         geoDesc.innerHTML = `${gpsIntegrity.reasons.join('. ')}.<br><span style="color:#c62828;">जीपीएस सिग्नल कमजोर या संदिग्ध है। कृपया खुले आसमान के नीचे आकर पुनः प्रयास करें।</span>`;
-        adminBtn.innerText = '🛠️ Admin Test Mode (एडमिन टेस्ट)';
-        adminBtn.style.display = 'inline-block';
+        adminBtn.style.display = 'none';
         btnLogin.disabled = true;
         btnLogout.disabled = true;
       } else {
@@ -570,25 +569,65 @@
         geoIcon.innerText = '🚫';
         geoTitle.innerText = `Outside Workplace Boundary`;
         geoDesc.innerHTML = `You are <strong>${distStr}</strong> away from ${activeSite.shortName}. Attendance is strictly allowed within ${activeSite.radiusMeters}m of the site.<br><span style="color:#c62828;">आप कार्यस्थल से ${distStr} दूर हैं। पंच केवल ${activeSite.radiusMeters}m दायरे में मान्य है।</span>`;
-        adminBtn.innerText = '🛠️ Admin Test Mode (एडमिन टेस्ट)';
-        adminBtn.style.display = 'inline-block';
+        adminBtn.style.display = 'none';
         btnLogin.disabled = true;
         btnLogout.disabled = true;
       }
     }
 
-    // Toggle Admin Bypass for remote testing
-    function toggleAdminBypass() {
+    // Admin Mode Secret Access & Password Protection
+    // Accepted passwords: 'SW2026', 'admin2026', or 'SW_CRYSTALLIX_DEVASYA_2026'
+    const ADMIN_PASSWORDS = ['SW2026', 'admin2026', 'SW_CRYSTALLIX_DEVASYA_2026', 'swadmin2026'];
+    let headerTapCount = 0;
+    let lastHeaderTapTime = 0;
+
+    function handleAdminSecretTrigger() {
       if (adminBypass) {
-        adminBypass = false;
-        updateGeofenceUI();
-      } else {
-        const ok = confirm('Enable Admin Test Mode to allow punching outside workplace boundary for testing?\nकार्यस्थल सीमा से बाहर टेस्ट पंच करने के लिए एडमिन टेस्ट मोड ऑन करें?');
-        if (ok) {
-          adminBypass = true;
+        if (confirm('Admin Test Mode is currently active.\nDo you want to turn it OFF and restore strict geofencing?\n(एडमिन टेस्ट मोड बंद करें?)')) {
+          adminBypass = false;
           updateGeofenceUI();
+          alert('Admin Test Mode disabled (एडमिन टेस्ट मोड बंद हो गया).');
         }
+        return;
       }
+
+      const inputPassword = prompt('🔒 Admin Access Required\nEnter Admin Password to enable Test Mode:\n(एडमिन टेस्ट मोड के लिए पासवर्ड दर्ज करें)');
+      if (inputPassword === null) return; // user cancelled
+
+      if (ADMIN_PASSWORDS.includes(inputPassword.trim())) {
+        adminBypass = true;
+        updateGeofenceUI();
+        alert('✅ Admin Test Mode Enabled.\nOff-site test punch is active for verification.');
+      } else {
+        alert('❌ Incorrect Password. Access denied (गलत पासवर्ड).');
+      }
+    }
+
+    // Secret trigger: Tap header title or site icon 5 times within 2.5 seconds
+    function onHeaderSecretTap() {
+      const now = Date.now();
+      if (now - lastHeaderTapTime > 2500) {
+        headerTapCount = 0;
+      }
+      lastHeaderTapTime = now;
+      headerTapCount++;
+
+      if (headerTapCount >= 5) {
+        headerTapCount = 0;
+        handleAdminSecretTrigger();
+      }
+    }
+
+    // Toggle button handler (when button is visible in test mode)
+    function toggleAdminBypass() {
+      handleAdminSecretTrigger();
+    }
+
+    // Optional query parameter ?admin=1 or ?test=1 prompts password
+    if (urlParams.get('admin') === '1' || urlParams.get('test') === '1') {
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(handleAdminSecretTrigger, 1000);
+      });
     }
 
     // Acquire GPS location with Hardware Integrity Check
