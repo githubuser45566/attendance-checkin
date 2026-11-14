@@ -349,10 +349,10 @@
       },
       'office': {
         id: 'office',
-        name: 'Stitch Waste Office, Mandawali',
-        shortName: 'Stitch Waste Office',
-        punchName: 'Office Mandawali',
-        address: 'A-120, IP Ext, Chander Vihar, Mandawali, New Delhi 110092',
+        name: 'SW Office',
+        shortName: 'SW Office',
+        punchName: 'SW Office',
+        address: 'A-120, IP Ext, Chander Vihar, New Delhi 110092',
         lat: 28.6341896,
         lng: 77.2984507,
         radiusMeters: 120
@@ -721,7 +721,7 @@
       const acc = userCoords.accuracy || 0;
       const sig = await generatePunchSignature(action, userCoords.lat, userCoords.lng, acc, t);
 
-      // Include site name with action (e.g. "Login Office Mandawali" or "Login Devasya City Centre")
+      // Include site name with action (e.g. "Login SW Office" or "Login Devasya City Centre")
       const actionText = `${action} ${activeSite.punchName}`;
       const mapLink = `https://maps.google.com/?q=${userCoords.lat},${userCoords.lng}&acc=${acc}&t=${t}&sig=${sig}`;
       const message = `${actionText}\n${mapLink}`;

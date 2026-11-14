@@ -2,7 +2,7 @@
 """
 Generates high-resolution QR codes, PNG poster, PDF poster, and printable HTML poster
 for Stitch Waste Head Office attendance check-in.
-Address: A-120, IP Ext, Chander Vihar, Mandawali, New Delhi, Delhi, 110092
+Address: A-120, IP Ext, Chander Vihar, New Delhi, Delhi, 110092
 """
 
 import os
@@ -20,8 +20,8 @@ FONT_REG = "/home/rahul/.local/share/fonts/microsoft/Nirmala.ttf"
 
 TARGET_URL = "https://githubuser45566.github.io/attendance-checkin/?site=office"
 COMPANY_NAME = "Stitch Waste"
-SITE_NAME = "Head Office, Mandawali"
-SITE_ADDRESS = "A-120, IP Ext, Chander Vihar, Mandawali, New Delhi 110092"
+SITE_NAME = "SW Office"
+SITE_ADDRESS = "A-120, IP Ext, Chander Vihar, New Delhi 110092"
 
 def generate_qr(target_url, filename="office_qr.png"):
     qr = qrcode.QRCode(
