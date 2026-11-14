@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Attendance QR Poster - Stitch Waste (Head Office, Mandawali)</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', 'Nirmala UI', -apple-system, Roboto, 'Noto Sans Devanagari', sans-serif;
+    }
+    body {
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .poster {
+      width: 190mm;
+      max-width: 100%;
+      min-height: 277mm;
+      background: #ffffff;
+      padding: 28px 36px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #d1d7db;
+    }
+    .header {
+      text-align: center;
+      width: 100%;
+      border-bottom: 2px solid #e9edef;
+      padding-bottom: 14px;
+    }
+    .badge {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #075e54;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 32px;
+      color: #075e54;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    h2 {
+      font-size: 20px;
+      color: #111b21;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .site-tag {
+      font-size: 15px;
+      color: #075e54;
+      font-weight: 700;
+    }
+    .site-addr {
+      font-size: 12px;
+      color: #667781;
+      margin-top: 2px;
+    }
+    .qr-container {
+      background: #fafafa;
+      border: 2px solid #e0e0e0;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+      margin: 10px 0;
+    }
+    .qr-container img {
+      width: 320px;
+      height: 320px;
+      display: block;
+    }
+    .qr-caption {
+      font-size: 15px;
+      font-weight: 800;
+      color: #075e54;
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+    }
+    .qr-subcaption {
+      font-size: 13px;
+      color: #667781;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .steps-container {
+      width: 100%;
+      background: #f7f9fa;
+      border-radius: 12px;
+      padding: 16px 20px;
+      border: 1px solid #e9edef;
+    }
+    .steps-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111b21;
+      margin-bottom: 12px;
+    }
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .step-item:last-child {
+      margin-bottom: 0;
+    }
+    .step-num {
+      background: #128c7e;
+      color: white;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-right: 12px;
+      margin-top: 2px;
+    }
+    .step-text h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111b21;
+      margin-bottom: 2px;
+    }
+    .step-text p {
+      font-size: 12px;
+      color: #667781;
+    }
+    .notice-box {
+      width: 100%;
+      background: #fff3e0;
+      border-left: 5px solid #ff9800;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 12px;
+      color: #bf360c;
+      line-height: 1.4;
+    }
+    .footer {
+      text-align: center;
+      width: 100%;
+      font-size: 12px;
+      color: #8696a0;
+      border-top: 1px solid #e9edef;
+      padding-top: 10px;
+    }
+    .footer-url {
+      color: #128C7E;
+      font-weight: 600;
+      margin-top: 3px;
+      font-size: 11px;
+    }
+    @media print {
+      body {
+        background: transparent !important;
+        padding: 0 !important;
+      }
+      .poster {
+        border: none !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        min-height: auto !important;
+        height: 100% !important;
+        padding: 0 !important;
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="poster">
+    <div class="header">
+      <div class="badge">Official Office Attendance</div>
+      <h1>Stitch Waste</h1>
+      <h2>दैनिक उपस्थिति एवं लोकेशन चेक-इन</h2>
+      <div class="site-tag">Site: <strong>Head Office, Mandawali</strong></div>
+      <div class="site-addr">A-120, IP Ext, Chander Vihar, Mandawali, New Delhi 110092</div>
+    </div>
+
+    <div class="qr-container">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAnwAAAJ8CAIAAADrj+sBAAAQQ0lEQVR4nO3cO3IsWxVFUUTIoIPYtA2bDj4v8THEgbvfvPtkjWErqrLyoxnprK/nef4CAPz5/vq7DwAAPoXoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAi31Mf9Ld//H3qo67zxz//9V//Zur8nHzXiZPjmfpdU8d8ovxdU8rzXF6vbff8NtuuxbbnYpupa+FNFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYDI2PbyiRs3VLdtjU5tqL51D3nqd924Q/vWLd8bd4O37VeX/J//mTddAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACLp9vKJG/dRp2zba53acC73dbcpN6WnrvsnX4sT5fN14sZ95k/+P+9NFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYDIuu3ltyp3Vu0h/6z8Xds2ZrftPL/1Xt22z3zjc/pW3nQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiNheXmRqr3XbtnC55Tvlk49n267yjfdPya7yXbzpAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABBZt7381h3RGzdm7dn+rNwonnLjLvcU12uPG495ijddAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACLp9vInb/mWpnaDt21Bnyh/V3l+tm3wbjvPJ1yvn5Wb25/Mmy4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAkbHt5XJH9K227bWWbtzXLW3b6b3xc7a58Xnfdjw38qYLABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQGRse3lKubM6tdO7bY902zFvu6bb3LgtXD472zact/2uKTc+pzceszddAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACLp9vK2rdET2/aZy3M49V3bdmi3XYvyeLZdixPlMb91u/vG6/7Wa+pNFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYDI1/M8v/sY/mfbNoG3beeW31Ue81vduDt9Yts9duN5vvH52raZvO14vOkCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBnbXr5x1/Sttm3Vbtv73WbbbvCJbc/gW3eetz07n7wpPcWbLgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwCR7999AP+PbRuhJ8rd1xu3fEs3budu2+AtbdtDnnLjMW97LrYdzwlvugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBEvp7nGfmgch/1xu3cKdt2p7d917ZjvtGNO89vvaZv/Z+57btsLwPAC4kuAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIt9TH3TjBuaJG3dNT9y4MVvadt232bade2LbNb3xt09914ltG+BTx+NNFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYDI2PbyjRuz27ZGSzfuBpc7tOXnbNuY3WbbLnd5PG/dZz4xdTzb/td50wWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgMra9vG3HeNve5rb92BM3nsOpvdZt92H5OVNuvH9O3HjM2/7/fPLxeNMFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBIPL1PE/2ZTdulp6w09t8l2P+9e86se0cTn3XiW273FO2nZ+37nKf8KYLABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQOS128sntu2Ibtu8LY/5xLb7Z8qN53DbMZfHM2XbRvGN37XtmE940wWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgMra9vG3fctte67bzc+LGDedt5/nGvehte7bbrumUbeewvBYntl2vKd50ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIh8l1+2bVe53D59645oadsG77Yd2m3Hc6I85m3/N6ZsO54TN7Zg6pi96QJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQ+XqeZ+SDtu1/3rh1vG1b+MS2PdtyZ/XGz5mybc+2/K4T247nxI3/f27kTRcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAyNj28olt+8w32rZV+9bd4BNvvZ/fuqu87XrdeMylbc/p1PF40wWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEg8j31Qdv2Lctt2BPb9mPL337ixh3abRvFJ8r7Z+q3T52fbff8jfvVU7Y9yyVvugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBExraX32rbZmlpah+1PIefvFVb/vYp5XeVe9Fv3RZ+63NRXi9vugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBE0u3lGzeKt+2Inrhxx7jceT6xba+1vA9vfE7f+uyceOt9eGLb8ZzwpgsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJA5Ot5npEPeuvmbWnqt5ebyVPKY37rLu6UT74P2eOt/xO86QJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQGdtePlHuM5/Yth+7bat222//5M/hZ9vu1W22bePfeA6neNMFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBIPI99UHb9jantka37RhPeeuG6o3HfONzMeXG316ew23Pafnbt53nKd50ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiMbS+f2LaL+9Y90qnfVe6+lp8zZdsu7olt5/DE1Dksn/cbz/OJT94tn+JNFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYDI1/M82ZeVO7SfvME79du3bSbfuLM65a3X9MS252Kb8rn45Gs6dczedAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIjG0vb9vg3bble+NG6JRte61Ttm0UT9m2q3zjbvmJt97P22z7Xd50ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIik28sntu0zT7lxs7S07f4pv8sG+B43/m+ZcuN+9Yltz6k3XQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiY9vLJz5583ZKuQ277Txvu6affD/f+Ntv3FW+cQ/5xv+rJW+6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAETS7eUT5UbolLfuo5b7uidu3M49se3++eTt3Bt3nt96z2/77VPPhTddAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACLfUx80tZN54pO3fG88nm3KY566FuXzdWLb8Zy48X/UlG33xolt53CKN10AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIl/P82RfVm4d37jPXB7ziW3nsHTj9Zrid/1s27b5tnv1xn348hx60wWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgsm57+cS2HdEp27ZqS2+9pie2bedOKTdvy/8t2/bYt13T0o3PuzddAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACLrtpdv3Dretg174q17vydu3MXddi3e+pxO2Xb/bHPjb5+6f7zpAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABD5/t0H8J/KndVyi7W0bVd5225wadvG7NTxvHVbeOp33bjLPWXbpv22+9CbLgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwCRr+d5Rj5o237slE/eR33red6297vNtl3uG/d1T9x4zNvcuHHtTRcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAyNj2Mj/btkN7Ytvmbfm7Tmy7Xie23T+lbffqtu966324jTddAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACLfUx+0bWe1dLIRWm6xTu2aTm2fvnVDtXTjZnJ5z5/Ytvd743Ox7T7ctnF9wpsuAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILAJGx7eUTb90aLU1tjZa7puV1L39XeW988rOzbbf8xLbd6Sm2qX+dN10AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIun28om37tlu2zou95lPfPJ33bjBe2Lb9dr27GzjmBvedAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIrNte/mTlJvAnK8/h1JZvqTzm8p4vP2fq/Ny4Dz/1XduOZ4o3XQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAitpcXmdp0vXGfufzt5S5uuen61t/+1g3ebderdOP1muJNFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYDIuu3lbRuhU8rftW2PtDwe+8w/K+/Dcl932z3/1h318vk6+ZwbN5y96QJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQ+XqeZ+SDtm2flm7cRz2x7Xed2La9fKNt191G8a/bdn5ObHsGp86hN10AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAImPbywDAz7zpAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAkX8Dmc+qH0aytdYAAAAASUVORK5CYII=" alt="Scan for Attendance">
+      <div class="qr-caption">SCAN WITH ANY SMARTPHONE CAMERA</div>
+      <div class="qr-subcaption">कैमरा या गूगल लेंस से स्कैन करें</div>
+    </div>
+
+    <div class="steps-container">
+      <div class="steps-title">3 Simple Steps / 3 आसान चरण:</div>
+      
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <h4>1. Scan QR Code (क्यूआर कोड स्कैन करें)</h4>
+          <p>Open phone camera or Google Lens and point at this code.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <h4>2. Allow GPS Location (लोकेशन की अनुमति दें)</h4>
+          <p>Browser will verify your presence at the office.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <h4>3. Send to Attendance Group (व्हाट्सएप ग्रुप में भेजें)</h4>
+          <p>Tap PUNCH IN or OUT, select your Attendance Group, and tap Send.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="notice-box">
+      <strong>Strict Attendance Policy / सख्त उपस्थिति नियम:</strong><br>
+      Every employee must punch from their own mobile phone. Proxy attendance is strictly prohibited.<br>
+      प्रत्येक कर्मचारी अपने ही फोन से पंच करें। प्रॉक्सी हाजिरी सिस्टम द्वारा स्वतः खारिज कर दी जाएगी।
+    </div>
+
+    <div class="footer">
+      Automated WhatsApp Attendance & Verification System • Stitch Waste
+      <div class="footer-url">https://githubuser45566.github.io/attendance-checkin/?site=office</div>
+    </div>
+  </div>
+</body>
+</html>
