@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generates high-resolution QR codes, PNG poster, PDF poster, and printable HTML poster
-for multiple NPCL sites in Greater Noida.
+for all NPCL sites in Greater Noida branded as SIC Technology.
 """
 
 import os
@@ -19,8 +19,16 @@ FONT_REG = "/home/rahul/.local/share/fonts/microsoft/Nirmala.ttf"
 
 SITES = [
     {
+        "id": "npcl_kp1",
+        "company_name": "SIC Technology",
+        "site_name": "NPCL KP-1, Greater Noida",
+        "site_address": "Noida Power Company (NPCL), Knowledge Park I, Greater Noida, UP 201310",
+        "target_url": "https://githubuser45566.github.io/attendance-checkin/?site=npcl_kp1",
+        "prefix": "npcl_kp1"
+    },
+    {
         "id": "npcl_kp2",
-        "company_name": "Stitch Waste",
+        "company_name": "SIC Technology",
         "site_name": "NPCL KP-2, Greater Noida",
         "site_address": "NPCL Substation, Knowledge Park II, Greater Noida, UP 201310",
         "target_url": "https://githubuser45566.github.io/attendance-checkin/?site=npcl_kp2",
@@ -28,19 +36,35 @@ SITES = [
     },
     {
         "id": "npcl_kp3",
-        "company_name": "Stitch Waste",
+        "company_name": "SIC Technology",
         "site_name": "NPCL KP-3, Greater Noida",
         "site_address": "NPCL Substation / STP, Knowledge Park III, Greater Noida, UP 201310",
         "target_url": "https://githubuser45566.github.io/attendance-checkin/?site=npcl_kp3",
         "prefix": "npcl_kp3"
     },
     {
+        "id": "npcl_kp4",
+        "company_name": "SIC Technology",
+        "site_name": "NPCL KP-4, Greater Noida",
+        "site_address": "NPCL Corporate Office, Knowledge Park IV, Greater Noida, UP 201310",
+        "target_url": "https://githubuser45566.github.io/attendance-checkin/?site=npcl_kp4",
+        "prefix": "npcl_kp4"
+    },
+    {
         "id": "npcl_sigma4",
-        "company_name": "Stitch Waste",
+        "company_name": "SIC Technology",
         "site_name": "NPCL Sigma-4, Greater Noida",
         "site_address": "NPCL Substation, Sigma IV, Greater Noida, UP 201310",
         "target_url": "https://githubuser45566.github.io/attendance-checkin/?site=npcl_sigma4",
         "prefix": "npcl_sigma4"
+    },
+    {
+        "id": "npcl_surajpur",
+        "company_name": "SIC Technology",
+        "site_name": "NPCL Surajpur Substation",
+        "site_address": "NPCL Substation, Surajpur, Greater Noida, UP",
+        "target_url": "https://githubuser45566.github.io/attendance-checkin/?site=npcl_surajpur",
+        "prefix": "npcl_surajpur"
     }
 ]
 
@@ -505,7 +529,7 @@ def generate_html_poster(site):
 def generate_all():
     for site in SITES:
         print("=" * 60)
-        print(f"Generating Poster Suite for {site['site_name']}...")
+        print(f"Generating Poster Suite for {site['site_name']} ({site['company_name']})...")
         print(f"Target URL: {site['target_url']}")
         print("=" * 60)
         generate_qr(site["target_url"], f"{site['prefix']}_qr.png")

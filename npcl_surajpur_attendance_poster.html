@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Attendance QR Poster - SIC Technology (NPCL Surajpur Substation)</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', 'Nirmala UI', -apple-system, Roboto, 'Noto Sans Devanagari', sans-serif;
+    }
+    body {
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .poster {
+      width: 190mm;
+      max-width: 100%;
+      min-height: 277mm;
+      background: #ffffff;
+      padding: 28px 36px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #d1d7db;
+    }
+    .header {
+      text-align: center;
+      width: 100%;
+      border-bottom: 2px solid #e9edef;
+      padding-bottom: 14px;
+    }
+    .badge {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #075e54;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 32px;
+      color: #075e54;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    h2 {
+      font-size: 20px;
+      color: #111b21;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .site-tag {
+      font-size: 15px;
+      color: #075e54;
+      font-weight: 700;
+    }
+    .site-addr {
+      font-size: 12px;
+      color: #667781;
+      margin-top: 2px;
+    }
+    .qr-container {
+      background: #fafafa;
+      border: 2px solid #e0e0e0;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+      margin: 10px 0;
+    }
+    .qr-container img {
+      width: 320px;
+      height: 320px;
+      display: block;
+    }
+    .qr-caption {
+      font-size: 15px;
+      font-weight: 800;
+      color: #075e54;
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+    }
+    .qr-subcaption {
+      font-size: 13px;
+      color: #667781;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .steps-container {
+      width: 100%;
+      background: #f7f9fa;
+      border-radius: 12px;
+      padding: 16px 20px;
+      border: 1px solid #e9edef;
+    }
+    .steps-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111b21;
+      margin-bottom: 12px;
+    }
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .step-item:last-child {
+      margin-bottom: 0;
+    }
+    .step-num {
+      background: #128c7e;
+      color: white;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-right: 12px;
+      margin-top: 2px;
+    }
+    .step-text h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111b21;
+      margin-bottom: 2px;
+    }
+    .step-text p {
+      font-size: 12px;
+      color: #667781;
+    }
+    .notice-box {
+      width: 100%;
+      background: #fff3e0;
+      border-left: 5px solid #ff9800;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 12px;
+      color: #bf360c;
+      line-height: 1.4;
+    }
+    .footer {
+      text-align: center;
+      width: 100%;
+      font-size: 12px;
+      color: #8696a0;
+      border-top: 1px solid #e9edef;
+      padding-top: 10px;
+    }
+    .footer-url {
+      color: #128C7E;
+      font-weight: 600;
+      margin-top: 3px;
+      font-size: 11px;
+    }
+    @media print {
+      body {
+        background: transparent !important;
+        padding: 0 !important;
+      }
+      .poster {
+        border: none !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        min-height: auto !important;
+        height: 100% !important;
+        padding: 0 !important;
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="poster">
+    <div class="header">
+      <div class="badge">Official Site Attendance</div>
+      <h1>SIC Technology</h1>
+      <h2>दैनिक उपस्थिति एवं लोकेशन चेक-इन</h2>
+      <div class="site-tag">Site: <strong>NPCL Surajpur Substation</strong></div>
+      <div class="site-addr">NPCL Substation, Surajpur, Greater Noida, UP</div>
+    </div>
+
+    <div class="qr-container">
+      <img src="data:image/png;base64,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tG1X+cRbd5WnbDuvcud5m23b1GULtv3Oe9MFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBIPL1PM/IB23bIy33Nm889ynbruG2+/7W52fblu82N16f8jv4ybzpAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABAZ214+sW1j9kZTu6afvD9cXkN+3bbnZ8pbz2vKtu/p1PF40wWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEg8j31Qdv2Lac2gads2yguz/3EjTu05Tb1lG3Hc+LGYz7xyb8J27bWy+PxpgsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJAZGx7ecq2fd237r6emLoX5TW03b3H1DHfeJ23/Y5N2fYc3viMedMFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBIJJuL09tlpbbp9t2RE/cuGNc7jyf2Lav+9Zd5bc+89vu15Rt51U2ZYo3XQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAi6fbytg3Mcjv3xLa93xu3hctnbOp+bXsOtymfjU/2yden/N3wpgsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJA5Ot5nuyfbdtefqupDdVte8jbPmebbff9xLZ9b8/Gz956DW0vA8ALiS4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAi31MftG0Xt9x0nVLukdpQbf7XlKljfut3sDyeG89r24761P86se03ypsuAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILAJGx7eUT27ZP37pH+tad3m17vye27b5uu843fi+2XcPStvMqf+umeNMFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBIPL1PM/IB924xTrlxmMu3bjlW9p27tuO58Rbvzsntl3nt26tT11nb7oAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4ARNZtL5c+eat2yiff9ylTO7Tl/3rrM79tW7j01mdj273wpgsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJAZGx7ecq2HdoT5RbrW/dRT2w79yk3bvCeeOv3dNv/mrLtfk3ZtpXtTRcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWASLq9vG3XdNtu8Im3nvu23ddte8jbbLvO247nxI3fixO+Oz/zpgsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJAZGx7eWpHtNwInVLuo267hrZhf11537ed+4ltu+VT/+vEjb8JJ8rneds99aYLABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQOR76oO27X9u2/Y8+ZxyF7e8Xzfe9xvd+MyfmDqebVu+274XU7ZtHW/jTRcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAyNfzPCMfVG6x3vi/tu2+2mL9WXnM2/5X+d2ZcuPm9rbfqPJ/3fhsTF1Db7oAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4ARMa2l6fcuCO6jX3UX3fjTu8nH/O2Xe4b99hP3Hidt/GmCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkDku/xnN25pbttH3XZ9bB3vceNzuG3Ll59te35u3J32pgsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJAJN1ePlFue751x/jE1HUu71e5s1ruhJf3Yuo6b9skn1J+B2/crz5x4x5yeczedAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIfD3PM/JBN+5tnti2Lezcf91bd4On3Hidb/xenPjk5/BEeX2mnjFvugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBExraX+dm2fdRy83bb9umJT94NLreXt7nxnp7YdszbjqfkTRcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAyPfUB924szrlZCO03CieMrV9+tYN1dKNm8nbnvltz/ON+8PbnsMbt9+96QJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQGdtePrFtR/TEjXvIJ8dc7pqW991u8B7b7sWN9+vG358b/1fJmy4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAkXR7+cSN+6gntm0dl/vMJ7ZtOJ+4cRP4xLZ7euPnbLunJxxzw5suAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILAJF128uf7Mb94RuV13Bqy3ebqWMun/nyc6auz7ZN6XKXe9vxTPGmCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkDE9vIi2/ZRS9s2Zk9s21W+8dy3PfM33q9t1/DEjfdrijddAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACLrtpdv3A0+UZ7Xtj3S8njsM/9s2/FM2XbM23aVT2x75k8+58YNZ2+6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAES+nucZ+aBt26elbXvR5YbqNtv2bG90457ttme1fA63bYlP2fYdnDp3b7oAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4ARMa2lwGAn3nTBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIv8Fjmimf112l4YAAAAASUVORK5CYII=" alt="Scan for Attendance">
+      <div class="qr-caption">SCAN WITH ANY SMARTPHONE CAMERA</div>
+      <div class="qr-subcaption">कैमरा या गूगल लेंस से स्कैन करें</div>
+    </div>
+
+    <div class="steps-container">
+      <div class="steps-title">3 Simple Steps / 3 आसान चरण:</div>
+      
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <h4>1. Scan QR Code (क्यूआर कोड स्कैन करें)</h4>
+          <p>Open phone camera or Google Lens and point at this code.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <h4>2. Allow GPS Location (लोकेशन की अनुमति दें)</h4>
+          <p>Browser will automatically verify your presence at NPCL Surajpur Substation.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <h4>3. Send to Attendance Group (व्हाट्सएप ग्रुप में भेजें)</h4>
+          <p>Tap PUNCH IN or OUT, select your Attendance Group, and tap Send.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="notice-box">
+      <strong>Strict Attendance Policy / सख्त उपस्थिति नियम:</strong><br>
+      Every employee must punch from their own mobile phone. Proxy attendance is strictly prohibited.<br>
+      प्रत्येक कर्मचारी अपने ही फोन से पंच करें। प्रॉक्सी हाजिरी सिस्टम द्वारा स्वतः खारिज कर दी जाएगी।
+    </div>
+
+    <div class="footer">
+      Automated WhatsApp Attendance & Verification System • SIC Technology
+      <div class="footer-url">https://githubuser45566.github.io/attendance-checkin/?site=npcl_surajpur</div>
+    </div>
+  </div>
+</body>
+</html>

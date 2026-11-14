@@ -329,7 +329,7 @@
       </ol>
     </div>
 
-    <div class="footer">
+    <div class="footer" id="app-footer">
       Powered by Stitch Waste Automated Attendance System
     </div>
   </div>
@@ -339,6 +339,7 @@
     const SITES = {
       'devasya': {
         id: 'devasya',
+        company: 'Stitch Waste',
         name: 'Devasya City Centre, Shahdara',
         shortName: 'Devasya City Centre',
         punchName: 'Devasya City Centre',
@@ -349,6 +350,7 @@
       },
       'office': {
         id: 'office',
+        company: 'Stitch Waste',
         name: 'SW Office',
         shortName: 'SW Office',
         punchName: 'SW Office',
@@ -359,6 +361,7 @@
       },
       'npcl_kp1': {
         id: 'npcl_kp1',
+        company: 'SIC Technology',
         name: 'NPCL KP-1, Greater Noida',
         shortName: 'NPCL KP-1',
         punchName: 'NPCL KP1 Greater Noida',
@@ -369,6 +372,7 @@
       },
       'npcl_kp2': {
         id: 'npcl_kp2',
+        company: 'SIC Technology',
         name: 'NPCL KP-2, Greater Noida',
         shortName: 'NPCL KP-2',
         punchName: 'NPCL KP2 Greater Noida',
@@ -379,6 +383,7 @@
       },
       'npcl_kp3': {
         id: 'npcl_kp3',
+        company: 'SIC Technology',
         name: 'NPCL KP-3, Greater Noida',
         shortName: 'NPCL KP-3',
         punchName: 'NPCL KP3 Greater Noida',
@@ -389,6 +394,7 @@
       },
       'npcl_kp4': {
         id: 'npcl_kp4',
+        company: 'SIC Technology',
         name: 'NPCL KP-4, Greater Noida',
         shortName: 'NPCL KP-4',
         punchName: 'NPCL KP4 Greater Noida',
@@ -399,6 +405,7 @@
       },
       'npcl_sigma4': {
         id: 'npcl_sigma4',
+        company: 'SIC Technology',
         name: 'NPCL Sigma-4, Greater Noida',
         shortName: 'NPCL Sigma-4',
         punchName: 'NPCL Sigma4 Greater Noida',
@@ -409,6 +416,7 @@
       },
       'npcl_dadha': {
         id: 'npcl_dadha',
+        company: 'SIC Technology',
         name: 'NPCL Dadha / Kasna',
         shortName: 'NPCL Dadha',
         punchName: 'NPCL Dadha Greater Noida',
@@ -419,6 +427,7 @@
       },
       'npcl_surajpur': {
         id: 'npcl_surajpur',
+        company: 'SIC Technology',
         name: 'NPCL Surajpur Substation',
         shortName: 'NPCL Surajpur',
         punchName: 'NPCL Surajpur Greater Noida',
@@ -436,11 +445,14 @@
     let activeSite = siteLockedByUrl ? SITES[siteParam] : SITES['devasya'];
 
     function applySiteUI(site) {
-      document.title = `Smart Attendance Check-In - ${site.shortName}`;
+      const company = site.company || 'Stitch Waste';
+      document.title = `${company} Attendance - ${site.shortName}`;
       const headerSub = document.getElementById('header-subtitle');
       if (headerSub) headerSub.innerText = `${site.name} | दैनिक उपस्थिति पंच`;
       const instrSite = document.getElementById('instruction-site');
       if (instrSite) instrSite.innerText = site.shortName;
+      const footerEl = document.getElementById('app-footer');
+      if (footerEl) footerEl.innerText = `Powered by ${company} Automated Attendance System`;
     }
 
     // Apply UI labels immediately
