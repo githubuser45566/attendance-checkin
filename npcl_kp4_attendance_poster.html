@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Attendance QR Poster - Stitch Waste (NPCL KP-4, Greater Noida)</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', 'Nirmala UI', -apple-system, Roboto, 'Noto Sans Devanagari', sans-serif;
+    }
+    body {
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .poster {
+      width: 190mm;
+      max-width: 100%;
+      min-height: 277mm;
+      background: #ffffff;
+      padding: 28px 36px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #d1d7db;
+    }
+    .header {
+      text-align: center;
+      width: 100%;
+      border-bottom: 2px solid #e9edef;
+      padding-bottom: 14px;
+    }
+    .badge {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #075e54;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 32px;
+      color: #075e54;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    h2 {
+      font-size: 20px;
+      color: #111b21;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .site-tag {
+      font-size: 15px;
+      color: #075e54;
+      font-weight: 700;
+    }
+    .site-addr {
+      font-size: 12px;
+      color: #667781;
+      margin-top: 2px;
+    }
+    .qr-container {
+      background: #fafafa;
+      border: 2px solid #e0e0e0;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+      margin: 10px 0;
+    }
+    .qr-container img {
+      width: 320px;
+      height: 320px;
+      display: block;
+    }
+    .qr-caption {
+      font-size: 15px;
+      font-weight: 800;
+      color: #075e54;
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+    }
+    .qr-subcaption {
+      font-size: 13px;
+      color: #667781;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .steps-container {
+      width: 100%;
+      background: #f7f9fa;
+      border-radius: 12px;
+      padding: 16px 20px;
+      border: 1px solid #e9edef;
+    }
+    .steps-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111b21;
+      margin-bottom: 12px;
+    }
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .step-item:last-child {
+      margin-bottom: 0;
+    }
+    .step-num {
+      background: #128c7e;
+      color: white;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-right: 12px;
+      margin-top: 2px;
+    }
+    .step-text h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111b21;
+      margin-bottom: 2px;
+    }
+    .step-text p {
+      font-size: 12px;
+      color: #667781;
+    }
+    .notice-box {
+      width: 100%;
+      background: #fff3e0;
+      border-left: 5px solid #ff9800;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 12px;
+      color: #bf360c;
+      line-height: 1.4;
+    }
+    .footer {
+      text-align: center;
+      width: 100%;
+      font-size: 12px;
+      color: #8696a0;
+      border-top: 1px solid #e9edef;
+      padding-top: 10px;
+    }
+    .footer-url {
+      color: #128C7E;
+      font-weight: 600;
+      margin-top: 3px;
+      font-size: 11px;
+    }
+    @media print {
+      body {
+        background: transparent !important;
+        padding: 0 !important;
+      }
+      .poster {
+        border: none !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        min-height: auto !important;
+        height: 100% !important;
+        padding: 0 !important;
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="poster">
+    <div class="header">
+      <div class="badge">Official Site Attendance</div>
+      <h1>Stitch Waste</h1>
+      <h2>दैनिक उपस्थिति एवं लोकेशन चेक-इन</h2>
+      <div class="site-tag">Site: <strong>NPCL KP-4, Greater Noida</strong></div>
+      <div class="site-addr">NPCL Corporate Office, Knowledge Park IV, Greater Noida, UP 201310</div>
+    </div>
+
+    <div class="qr-container">
+      <img src="data:image/png;base64,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+WzbfS2fw/I4pW3P2Iltz+GUbedzYlsLyv/z3nQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiHw9zzNyoG37n+Xe5rZN13IX98bvfuN9v/EalrZtQd+42X7j/58bedMFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBIDK2vXxi217rjaZ2Td+6G3yivIafbNsG77b7te13sc223+nU+XjTBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASDyPXWgbfuWU5vAU7ZtFG/bxb1xh7bcpp5Sns+2777tmf/k/wk3/paneNMFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBIDK2vfxW2/ZjS1P7qOU1fOtu8LbN5CnlZ5Vb2du2hae89XdRfi9vugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBE0u3lbRuYJ7btiJ64cce43Hk+sW1f963P/JS3/na22fa9tp3PCW+6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAES+nucZOVC5Q/tW27apb9wW3rbdfePv4pOfQ/Z46/8Eb7oAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4ARL6nDrRtr/Wtpq7z1GedmDqfqedn23GmfPJG8Vt3eqeU/xO2XcNt98ubLgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwCRse3lbXub23Zot+1/3riheuLGc54ydU+3bWXfuAE+ZdvvtPzu267zFG+6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAETGtpdPbNvFfese6dT3Kndfy+OUtu3ibrsXU/dr24bzjc/qiW275dvO54Q3XQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiY9vLN26Nlruvb/2sbbad81v3fsvf8ls30qeOUz7z27ayb3wOvekCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEPl6nue3z+HflBuzN26Wnnjr3u+Jt97T0rZ97/K3/NZn9cS2/5lTtn0vb7oAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4ARL6nDlRusU4dZ9s5T33WJ28CT9m2AV4eZ9vvYtve77brPOXG/eoT2/a9vekCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEPl6nue3z+F/tm0b9sSNG7xTtm2fbtuGnbLteT6x7Zm/8bdz4sZzfitvugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBEPnp7ubRt03WbT95n3vZsfPJ27o07z9uenxM3fvep34U3XQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAi31MHunEn88Yt33IXt7w+25TP6o3X+cZzPjF1ztv2kLf93zhx4/NzwpsuAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILAJGv53myDyv3mcvN5BvP+cS2a1jatiV+4q3PYWnbPvyJbffU7+Jn3nQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiKzbXj6xbUd0yo1btVNuvKc37seWys3b8n/Ltj32bc9hadv/8BPedAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIfP/2CfynbTuZN+6sbttrPbFtQ3Xblu/UZ50o78WNz+onu/F3se335U0XACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgMi67eVyJ3PbzvOUcjv3rZ914pN3g2/cAC+3zadsO58T2/aZtz2H3nQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiHw9zzNyoG0bqlPKHdFtyl3Tbcf5ZNu2st963288523Kazj1u/CmCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBkbHuZn9lQ/dm2vd8pn3w+2575bTu92z7rrc/hNt50ASAiugAQEV0AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIh8Tx1o285q6WQjtNxinXLj9qkN5+azTmx75rfd0xt/X9uew20b1ye86QJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQGdtePvHWrdHSjXu2J+wG/2zbJvBb7/tbn58p257DG3nTBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASCSbi+feOue7cn3mtprnTrO1GedKD9rSnmdSzc+q9uOs+2ennDODW+6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAETWbS9/shv3h29UXsOpLd+3Kp/58jhT9/TGffipz9p2PlO86QJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQsb28yNSm6437zOV3L3dxy03Xbddw6jhv3eDd9qxu2yQ/ceNuuTddAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACJfz/OMHOitm8Dbvte2rdFt+8Mntm1cl/u6N9r2/JzY9oyd2LZJvu27T52PN10AiIguAEREFwAiogsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIt/lh924obpNuXU8tTW6bUP1xs86se2+l7ad89SW77Z7Wh5n2+9rijddAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACJfz/P89jkAwEfwpgsAEdEFgIjoAkBEdAEgIroAEBFdAIiILgBERBcAIqILABHRBYCI6AJARHQBICK6ABARXQCIiC4AREQXACKiCwAR0QWAiOgCQER0ASAiugAQEV0AiIguAET+BfRqr7Vlj1ynAAAAAElFTkSuQmCC" alt="Scan for Attendance">
+      <div class="qr-caption">SCAN WITH ANY SMARTPHONE CAMERA</div>
+      <div class="qr-subcaption">कैमरा या गूगल लेंस से स्कैन करें</div>
+    </div>
+
+    <div class="steps-container">
+      <div class="steps-title">3 Simple Steps / 3 आसान चरण:</div>
+      
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <h4>1. Scan QR Code (क्यूआर कोड स्कैन करें)</h4>
+          <p>Open phone camera or Google Lens and point at this code.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <h4>2. Allow GPS Location (लोकेशन की अनुमति दें)</h4>
+          <p>Browser will automatically verify your presence at NPCL KP-4.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <h4>3. Send to Attendance Group (व्हाट्सएप ग्रुप में भेजें)</h4>
+          <p>Tap PUNCH IN or OUT, select your Attendance Group, and tap Send.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="notice-box">
+      <strong>Strict Attendance Policy / सख्त उपस्थिति नियम:</strong><br>
+      Every employee must punch from their own mobile phone. Proxy attendance is strictly prohibited.<br>
+      प्रत्येक कर्मचारी अपने ही फोन से पंच करें। प्रॉक्सी हाजिरी सिस्टम द्वारा स्वतः खारिज कर दी जाएगी।
+    </div>
+
+    <div class="footer">
+      Automated WhatsApp Attendance & Verification System • Stitch Waste
+      <div class="footer-url">https://githubuser45566.github.io/attendance-checkin/?site=npcl_kp4</div>
+    </div>
+  </div>
+</body>
+</html>
